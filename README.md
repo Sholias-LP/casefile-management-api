@@ -80,5 +80,5 @@ Utilized this principle since it abstains from investing energy on features that
 
 ---
 
-**Authors:** Giwa Jossy, Janet Ogenyi
+**Authors:** [Giwa Jossy](https://github.com/giwajossy) & [Janet Ogenyi](https://github.com/JanetEne):
 
