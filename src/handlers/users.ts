@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { Op } from 'sequelize'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import isEmail from 'validator/lib/isEmail'
@@ -108,6 +109,27 @@ class User {
         })
 
 
+    }
+
+
+    // Get Users By Role
+    static getUsersByRole(req: Request, res: Response) {
+
+        UserModel.findAll({
+            where: {
+                role: {
+                    [Op.substring]: `%${req.query.role}%`
+                }
+            }
+        }).then((users) => {
+            if (users.length === 0) return res.send({message: "BadRequest"})
+            res.status(200).send({
+                success: true,
+                message: `${req.query.role}s retrieved sucessfully`,
+                data: users
+            })
+        })
+        
     }
 
 }
