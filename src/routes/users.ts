@@ -3,8 +3,8 @@ import User from '../handlers/users'
 
 const router = express.Router()
 
-// Register a user
 router.post('/register',  User.Register);
+router.post('/signin',  User.signIn);
 
 
 export default router
