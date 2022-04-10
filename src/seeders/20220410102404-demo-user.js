@@ -15,18 +15,9 @@ module.exports = {
     },
     {
       firstName: 'Sheila',
-      lastName: 'Sheila',
+      lastName: 'Ovweriavwose',
       email: 'sheila@sholiaslp.com',
       role: 'partner',
-      hash: 'someRandomeString',
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },
-    {
-      firstName: 'Adenike',
-      lastName: 'Adenike',
-      email: 'adenike@sholiaslp.com',
-      role: 'associate',
       hash: 'someRandomeString',
       createdAt: new Date(),
       updatedAt: new Date()
