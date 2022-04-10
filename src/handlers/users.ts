@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import isEmail from 'validator/lib/isEmail'
 import Models from '../models'
@@ -8,6 +9,7 @@ const secret = process.env.SECRET as string
 
 class User {
 
+    // Register user
     static async Register(req: Request, res: Response) {
         if (!isEmail(req.body.email)) {
             return res.status(400).send({ message: 'Email Invalid' })
@@ -51,6 +53,45 @@ class User {
                 })
             } else {
                 return res.status(400).send({ message: 'User Already Exists' })
+            }
+        }
+    }
+
+
+    // Sign-In User
+    static async signIn(req: Request, res: Response) {
+        if (!isEmail(req.body.email)) {
+            return res.status(400).send({ message: 'Invalid Email' })
+        } else {
+            const user = await UserModel.findOne({ where: { email: req.body.email } })
+
+            if (user) {
+                if (!bcrypt.compareSync(req.body.password, user.hash)) {
+                    return res.status(400).send({ message: 'Invalid Password' })
+                } else {
+                    return res.status(200).send({
+                        success: true,
+                        message: 'Sign in Successful',
+                        data: {
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            email: user.email,
+                            role: user.role,
+                            token: jwt.sign(
+                                {
+                                    firstName: user.firstName,
+                                    lastName: user.lastName,
+                                    email: user.email,
+                                    role: user.role,
+                                    id: user.id
+                                },
+                                secret
+                            )
+                        }
+                    })
+                }
+            } else {
+                return res.status(400).send({ message: 'Email or password incorrect' })
             }
         }
     }
