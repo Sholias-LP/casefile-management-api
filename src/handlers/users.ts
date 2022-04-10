@@ -96,6 +96,20 @@ class User {
         }
     }
 
+
+    // Get All Users
+    static async getAllUsers(req: Request, res: Response) {
+
+        UserModel.findAll().then((counsel) => {
+            return res.status(200).send({
+                success: true,
+                data: counsel
+            })
+        })
+
+
+    }
+
 }
 
 export default User
