@@ -8,7 +8,7 @@ const welcomeRoute = (req: Request, res: Response) => {
     { 
       status: {
         code: 200,
-        message: "Success"
+        message: 'Success'
       },
       message: 'Welcome to the Casefile Management Syetem API'
     })
