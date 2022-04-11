@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   node: circleci/node@4.7.0
-  
+
 jobs:
   build_and_test:
     docker:
@@ -33,9 +33,9 @@ jobs:
       - run:
           command: yarn run lint
           name: Run Lint Checks
-      - run:
-          command: yarn test
-          name: Run Tests
+      # - run:
+      #     command: yarn test
+      #     name: Run Tests
       - persist_to_workspace:
           root: ~/project
           paths:
