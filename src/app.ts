@@ -13,8 +13,8 @@ import logger from 'morgan'
 /* -------------------------------------------------------------------------- */
 
 import indexRouter from './routes/index'
-import usersRouter from './routes/users'
-import casefilesRouter from './routes/casefile'
+import usersRouter from './routes/users.route'
+import casefilesRouter from './routes/casefile.route'
 
 const app = express();
 
