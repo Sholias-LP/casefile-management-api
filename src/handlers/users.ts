@@ -122,7 +122,7 @@ class User {
                 }
             }
         }).then((users) => {
-            if (users.length === 0) return res.send({message: "BadRequest"})
+            if (users.length === 0) return res.send({message: 'BadRequest'})
             res.status(200).send({
                 success: true,
                 message: `${req.query.role}s retrieved sucessfully`,
