@@ -10,7 +10,7 @@ const CasefilesModel = models.Casefile
 class Casefiles extends BaseHandler {
 
     // Add a new Casefile
-    static addASchool(req: Request, res: Response) {
+    static addACasefile(req: Request, res: Response) {
         CasefilesModel.create({
             id: req.body.id,
             caseID: `SHO_${uuidv4()}`,
