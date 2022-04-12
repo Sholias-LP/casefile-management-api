@@ -42,6 +42,22 @@ class Casefiles extends BaseHandler {
     }
 
 
+    // Get a specific casefile
+    static getACasefile(req: Request, res: Response) {
+        const id = Number(req.params.id)
+        CasefilesModel.findOne({
+            where: {id}
+        }).then((casefile) => {
+            if (!casefile) return res.status(404).send({ success: false, message: 'Casefile not found' })
+            return res.status(200).send({
+                success: true,
+                message: 'Casefile retrieved successfully',
+                data: casefile
+            })
+        })
+    }
+
+
 }
 
 
