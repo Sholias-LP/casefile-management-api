@@ -28,6 +28,20 @@ class Casefiles extends BaseHandler {
             })
             .catch((err) => console.log(err))
     }
+
+
+    // Get all casefiles
+    static getAllCasefiles(req: Request, res: Response) {
+        CasefilesModel.findAll().then((casefiles) => {
+            return res.status(200).send({
+                success: true,
+                message: 'Casefiles retrieved successfully',
+                data: casefiles
+            })
+        })
+    }
+
+
 }
 
 
