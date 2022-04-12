@@ -8,6 +8,7 @@ router.post('/casefiles/new',  Casefile.addASchool);
 router.get('/casefiles/',  Casefile.getAllCasefiles);
 router.get('/casefiles/:id',  Casefile.getACasefile);
 router.put('/casefiles/:id',  Casefile.updateACasefile);
+router.delete('/casefiles/:id',  Casefile.deleteACasefile);
 
 
 

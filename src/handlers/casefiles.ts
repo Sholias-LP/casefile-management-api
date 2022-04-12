@@ -96,11 +96,32 @@ class Casefiles extends BaseHandler {
             } else {
                 return res
                     .status(404)
-                    .send({ 
+                    .send({
                         success: false,
-                        message: 'Casefile not found! Enter a valid ID' 
+                        message: 'Casefile not found! Enter a valid ID'
                     })
             }
+        })
+    }
+
+
+    // Delete a casefile
+    static async deleteACasefile(req: Request, res: Response) {
+        const casefileId = Number(req.params.id)
+        const casefile = await CasefilesModel.findByPk(casefileId)
+
+        if (!casefile) {
+            return res.status(404).send({
+                success: false,
+                message: 'Casefile not found. Use a valid'
+            })
+        }
+
+        return casefile.destroy().then(() => {
+            return res.status(200).send({
+                success: true,
+                message: 'Casefile Successfully Deleted'
+            })
         })
     }
 
