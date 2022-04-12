@@ -26,7 +26,7 @@ class Casefiles extends BaseHandler {
                     .status(201)
                     .send({
                         success: true,
-                        message: 'Casefile added successfully', 
+                        message: 'Casefile added successfully',
                         data: newCasefile
                     })
             })
@@ -58,6 +58,49 @@ class Casefiles extends BaseHandler {
                 message: 'Casefile retrieved successfully',
                 data: casefile
             })
+        })
+    }
+
+
+    // Update a casefile
+    static updateACasefile(req: Request, res: Response) {
+        const casefileId = Number(req.params.id)
+        CasefilesModel.findByPk(casefileId).then((casefile) => {
+            if (casefile) {
+                const {
+                    caseID,
+                    caseType,
+                    client,
+                    gender,
+                    occupation,
+                    brief,
+                    letter_of_engagement
+                } = req.body
+                return casefile
+                    .update({
+                        caseID: caseID || casefile.caseID,
+                        caseType: caseType || casefile.caseType,
+                        client: client || casefile.client,
+                        gender: gender || casefile.gender,
+                        occupation: occupation || casefile.occupation,
+                        brief: brief || casefile.brief,
+                        letter_of_engagement: letter_of_engagement || casefile.letter_of_engagement
+                    })
+                    .then((casefile) => {
+                        return res.status(200).send({
+                            success: true,
+                            message: 'Casefile Updated Successfully',
+                            data: casefile
+                        })
+                    })
+            } else {
+                return res
+                    .status(404)
+                    .send({ 
+                        success: false,
+                        message: 'Casefile not found! Enter a valid ID' 
+                    })
+            }
         })
     }
 
