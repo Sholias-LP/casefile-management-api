@@ -24,7 +24,11 @@ class Casefiles extends BaseHandler {
             .then((newCasefile) => {
                 return res
                     .status(201)
-                    .send({ message: 'Casefile added successfully', newCasefile })
+                    .send({
+                        success: true,
+                        message: 'Casefile added successfully', 
+                        data: newCasefile
+                    })
             })
             .catch((err) => console.log(err))
     }
@@ -46,7 +50,7 @@ class Casefiles extends BaseHandler {
     static getACasefile(req: Request, res: Response) {
         const id = Number(req.params.id)
         CasefilesModel.findOne({
-            where: {id}
+            where: { id }
         }).then((casefile) => {
             if (!casefile) return res.status(404).send({ success: false, message: 'Casefile not found' })
             return res.status(200).send({
