@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { BaseHandler } from '../interfaces/handler'
-import models from '../models/index'
+import models from '../models/index.js'
 import { v4 as uuidv4 } from 'uuid';
 
 
