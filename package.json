@@ -2,6 +2,9 @@
   "name": "sch-finder-api",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "clean": "rimraf build/",
     "build": "npm run clean && tsc && npm run copy-files",
