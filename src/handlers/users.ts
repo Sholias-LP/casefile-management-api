@@ -3,7 +3,7 @@ import { Op } from 'sequelize'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import isEmail from 'validator/lib/isEmail'
-import Models from '../models'
+import Models from '../models/index.js'
 
 const UserModel = Models.User
 const secret = process.env.SECRET as string
