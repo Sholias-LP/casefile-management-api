@@ -23,7 +23,6 @@ module.exports = {
         'rejectUnauthorized': false
       }
     },
-    'operatorsAliases': false,
     'use_env_variable': 'DATABASE_URL'
   }
 }
