@@ -17,7 +17,7 @@ servers:
   -url_prod: https://casefile-management-api.herokuapp.com/
   description_prod: Production server
 
-schemes: [http, https]
+schemes: https
 
 
 
@@ -45,33 +45,6 @@ paths:
                         type: string
                   message: 
                     type: string
-
-  # Endpoint documentation to GET all Users.
-  /api/v1/users:
-    get:
-      tags:
-        - Users
-      summary: List all Users
-      description: Fetches all Users. This endpoint returns an object containing the metadata for each user.
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema: 
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data: 
-                    type: array
-                    items:
-                      type: object
-                      $ref: '#/components/schemas/UserProperty'
-        422:
-          $ref: '#/components/responses/BadRequestError'
-        500:
-          $ref: '#/components/responses/InternalError'
 
 
 
@@ -104,6 +77,7 @@ paths:
           $ref: "#/components/responses/InternalError"
   
 
+
   # Sign-in a user                
   /api/v1/users/signin: 
     post:
@@ -133,6 +107,36 @@ paths:
           $ref: "#/components/responses/InternalError"
 
 
+
+  # Endpoint documentation to GET all Users.
+  /api/v1/users:
+    get:
+      tags:
+        - Users
+      summary: List all Users
+      description: Fetches all Users. This endpoint returns an object containing the metadata for each user.
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data: 
+                    type: array
+                    items:
+                      type: object
+                      $ref: '#/components/schemas/UserProperty'
+        422:
+          $ref: '#/components/responses/BadRequestError'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+
+
   # Get user by role - partner or associate                
   /api/v1/users/role: 
     get:
@@ -156,6 +160,176 @@ paths:
           $ref: "#/components/responses/BadRequestError"
         500:
           $ref: "#/components/responses/InternalError"
+
+
+
+# CASEFILE
+# Create a new casefile                
+  /api/v1/casefiles/new: 
+    post:
+      tags:
+        - Casefiles
+      summary: Create a new casefile
+      description: Returns an object containing metadata about the new casefile
+      produces: 
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+      - in: body
+        name: casefile
+        schema: 
+          $ref: '#/components/schemas/AddCasefileRequestBody'
+      responses:
+        200:
+          description: Success 
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/AddCasefileResponseBody'
+        422:
+          $ref: "#/components/responses/BadRequestError"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+
+  # GET all Casefiles.
+  /api/v1/casefiles:
+    get:
+      tags:
+        - Casefiles
+      summary: List all casefiles
+      description: Fetches all casefiles. This endpoint returns an object containing the metadata for each casefile.
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data: 
+                    type: array
+                    items:
+                      type: object
+                      $ref: '#/components/schemas/CasefileProperty'
+        422:
+          $ref: '#/components/responses/BadRequestError'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+
+
+  # GET a specific casefile                  
+  /api/v1/casefiles/{id}:
+    get:
+      tags:
+        - Casefiles
+      summary: Fetch a specific casefile
+      description: This endpoint returns an object containing metadata of the casefile found.o
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: 
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data: 
+                    type: object
+                    $ref: '#/components/schemas/CasefileProperty'
+        404:
+          $ref: '#/components/responses/NotFoundError'
+        422:
+          $ref: '#/components/responses/BadRequestError'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+
+
+    # Update a casefile
+    put:
+      tags:
+        - Casefiles
+      summary: Update a casefile
+      description: Returns an object containing metadata of the updated casefile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: 
+            type: integer
+        - name: casefileRequestBody
+          in: body
+          required: true
+          schema: 
+                $ref: '#/components/schemas/AddCasefileRequestBody'
+      responses:
+        200:
+          description: Success 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    $ref: '#/components/schemas/CasefileProperty'
+        422:
+          $ref: "#/components/responses/BadRequestError"
+        500:
+          $ref: "#/components/responses/InternalError"     
+
+
+
+    delete:
+      tags:
+        - Casefiles
+      summary: Delete a casefile
+      description: Returns an confirming the status of the delete operation.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: 
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        404:
+          $ref: '#/components/responses/NotFoundError'
+        422:
+          $ref: '#/components/responses/BadRequestError'
+        500:
+          $ref: '#/components/responses/InternalError' 
+
 
 
 components:
@@ -262,6 +436,78 @@ components:
             role: 
               type: string
             hash: 
+              type: string
+            createdAt:
+              type: string
+            updatedAt:
+              type: string
+
+    CasefileProperty:
+      properties: 
+        id:
+          type: integer
+        caseID: 
+          type: string
+        caseType:
+          type: string
+        client:
+          type: string
+        gender: 
+          type: string
+        occupation: 
+          type: string
+        brief: 
+          type: string
+        letter_of_engagement: 
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+    AddCasefileRequestBody:
+      properties: 
+        id:
+          type: integer
+        caseID: 
+          type: string
+        caseType:
+          type: string
+        client:
+          type: string
+        gender: 
+          type: string
+        occupation: 
+          type: string
+        brief: 
+          type: string
+        letter_of_engagement: 
+          type: string
+
+    AddCasefileResponseBody:
+      properties: 
+        success:
+          type: boolean
+        message: 
+          type: string
+        data:
+          type: object
+          properties:
+            id:
+              type: integer
+            caseID: 
+              type: string
+            caseType:
+              type: string
+            client:
+              type: string
+            gender: 
+              type: string
+            occupation: 
+              type: string
+            brief: 
+              type: string
+            letter_of_engagement: 
               type: string
             createdAt:
               type: string
