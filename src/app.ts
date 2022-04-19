@@ -3,7 +3,8 @@
 /* -------------------------------------------------------------------------- */
 
 import createError from 'http-errors'
-import express, { Request, Response} from 'express';
+import express, { Request, Response } from 'express';
+import cors from 'cors'
 import path from 'path'
 import cookieParser from 'cookie-parser'
 import logger from 'morgan'
@@ -20,7 +21,16 @@ import casefilesRouter from './routes/casefile.route'
 
 const swaggerJsDocs = YAML.load(__dirname + '/spec/api.yaml')
 const app = express();
+app.use(cors())
 
+
+const options: cors.CorsOptions = {
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  optionsSuccessStatus: 204
+}
+
+app.use(cors(options));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
