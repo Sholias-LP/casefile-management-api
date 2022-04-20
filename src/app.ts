@@ -18,6 +18,7 @@ import YAML from 'yamljs'
 import indexRouter from './routes/index'
 import usersRouter from './routes/users.route'
 import casefilesRouter from './routes/casefile.route'
+import invalidRouter from './routes/invalidRoute'
 
 const swaggerJsDocs = YAML.load(__dirname + '/spec/api.yaml')
 const app = express();
@@ -41,6 +42,7 @@ app.use('/api/v1/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerJsDocs))
 app.use('/', indexRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/', casefilesRouter);
+app.use('/', invalidRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
