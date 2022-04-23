@@ -122,15 +122,50 @@ class User {
                 }
             }
         }).then((users) => {
-            if (users.length === 0) return res.send({message: 'BadRequest'})
+            if (users.length === 0) return res.send({ message: 'BadRequest' })
             res.status(200).send({
                 success: true,
                 message: `${req.query.role}s retrieved sucessfully`,
                 data: users
             })
         })
-        
+
     }
+
+
+    // Reset User Password
+    static async resetPassword(req: Request, res: Response) {
+
+        const { email, newPassword, confirmNewPassword } = req.body
+        const checkPasword = newPassword === confirmNewPassword
+
+        if (!isEmail(email)) {
+            return res.status(400).send({ message: 'Invalid Email' })
+        } else {
+            const user = await UserModel.findOne({ where: { email: email } })
+
+            if (user) {
+                
+                if (!checkPasword) res.status(400).send({ message: 'Passwords do not match' })
+                
+                user.update({
+                    hash: newPassword
+                }).then((data) => {
+                    return res.status(200).send({
+                        success: true,
+                        message: 'Password Changed',
+                        data: {hash: data.hash}
+                    })
+                })
+
+            } else {
+                return res.status(400).send({ message: 'This user doesn\'t exist' })
+            }
+
+        }
+
+    }
+
 
 }
 
