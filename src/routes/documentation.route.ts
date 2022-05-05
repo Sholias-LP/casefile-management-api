@@ -1,7 +1,6 @@
 import express from 'express';
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUI from 'swagger-ui-express';
-import YAML from 'yamljs';
 
 const router = express.Router()
 
@@ -21,7 +20,7 @@ const swaggerJsDocs = swaggerJSDoc({
                 name: 'Apache 2.0',
                 url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
             }
-        },
+        }
     },
     servers: [
         {
