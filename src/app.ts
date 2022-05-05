@@ -1,17 +1,9 @@
-/* -------------------------------------------------------------------------- */
-/*                              External imports                              */
-/* -------------------------------------------------------------------------- */
-
 import createError from 'http-errors'
 import express, { Request, Response } from 'express';
 import cors from 'cors'
 import path from 'path'
 import cookieParser from 'cookie-parser'
 import logger from 'morgan'
-
-/* -------------------------------------------------------------------------- */
-/*                              Internal imports                              */
-/* -------------------------------------------------------------------------- */
 
 import indexRouter from './routes/index'
 import usersRouter from './routes/users.route'
@@ -36,7 +28,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use('/api/v1/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerJsDocs))
 app.use('/api/v1/api-docs', documentationRouter)
 app.use('/', indexRouter);
 app.use('/api/v1/users', usersRouter);
