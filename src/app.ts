@@ -8,8 +8,6 @@ import cors from 'cors'
 import path from 'path'
 import cookieParser from 'cookie-parser'
 import logger from 'morgan'
-import swaggerUI from 'swagger-ui-express';
-import YAML from 'yamljs'
 
 /* -------------------------------------------------------------------------- */
 /*                              Internal imports                              */
@@ -19,8 +17,8 @@ import indexRouter from './routes/index'
 import usersRouter from './routes/users.route'
 import casefilesRouter from './routes/casefile.route'
 import invalidRouter from './routes/invalidRoute'
+import documentationRouter from './routes/documentation.route'
 
-const swaggerJsDocs = YAML.load(__dirname + '/spec/api.yaml')
 const app = express();
 app.use(cors())
 
@@ -38,7 +36,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api/v1/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerJsDocs))
+// app.use('/api/v1/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerJsDocs))
+app.use('/api/v1/api-docs', documentationRouter)
 app.use('/', indexRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/', casefilesRouter);

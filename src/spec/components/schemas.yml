@@ -1,0 +1,160 @@
+components:
+  schemas:
+    Message: 
+      required:
+          - error
+          - message
+      properties:
+        success: 
+          type: boolean
+        message: 
+          type: string 
+
+    UserRequestBody:
+      properties: 
+        id:
+          type: integer
+        firstName: 
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        role: 
+          type: string
+        password: 
+          type: string
+        confirmPassword:
+          type: string
+
+    UserResponse:
+      properties: 
+        id:
+          type: integer
+        firstName: 
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        role: 
+          type: string
+        hash: 
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    
+    SigninRequestBody:
+      properties: 
+        email:
+          type: string
+        password: 
+          type: string
+
+    SigninResponse:
+      properties: 
+        success:
+          type: boolean
+        message: 
+          type: string
+        data:
+          type: object
+          properties:
+            firstName:
+              type: string
+            lastName:
+              type: string
+            email: 
+              type: string
+            role:
+              type: string
+            token:
+              type: string
+
+    ResetPasswordRequestBody:
+      properties:
+        email:
+          type: string
+        newPassword:
+          type: string
+        confirmNewPassword:
+          type: string
+
+    ResetPasswordResponse:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: string
+          properties:
+            hash:
+              type: string
+
+    # CasefileProperty:
+    #   properties: 
+    #     id:
+    #       type: integer
+    #     caseID: 
+    #       type: string
+    #     caseType:
+    #       type: string
+    #     client:
+    #       type: string
+    #     gender: 
+    #       type: string
+    #     occupation: 
+    #       type: string
+    #     brief: 
+    #       type: string
+    #     letter_of_engagement: 
+    #       type: string
+    #     createdAt:
+    #       type: string
+    #     updatedAt:
+    #       type: string
+
+    CasefileRequestBody:
+      properties: 
+        id:
+          type: integer
+        caseID: 
+          type: string
+        caseType:
+          type: string
+        client:
+          type: string
+        gender: 
+          type: string
+        occupation: 
+          type: string
+        brief: 
+          type: string
+        letter_of_engagement: 
+          type: string
+
+    CasefileResponse:
+      properties:
+        id:
+          type: integer
+        caseID: 
+          type: string
+        caseType:
+          type: string
+        client:
+          type: string
+        gender: 
+          type: string
+        occupation: 
+          type: string
+        brief: 
+          type: string
+        letter_of_engagement: 
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string

@@ -1,0 +1,29 @@
+components:
+  responses:
+    BadRequestError:
+      description: Validation Failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Message'
+          example: 
+            - success: false
+              message: Validation Failed
+    NotFoundError:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Message'
+          example: 
+            - success: false
+              message: This resource does not exist
+    InternalError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Message'
+          example: 
+            - success: false
+              message: Internal server error
