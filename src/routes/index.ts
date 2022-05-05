@@ -6,11 +6,8 @@ const router = express.Router()
 const welcomeRoute = (req: Request, res: Response) => {
   res.status(200).send(
     { 
-      status: {
-        code: 200,
-        message: 'Success'
-      },
-      message: 'Welcome to the Casefile Management Syetem API'
+      success: true,
+      message: 'Welcome to the Casefile Management System API'
     })
 }
 

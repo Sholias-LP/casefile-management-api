@@ -145,19 +145,20 @@ class User {
             const user = await UserModel.findOne({ where: { email: email } })
 
             if (user) {
-                
-                if (!checkPasword) res.status(400).send({ message: 'Passwords do not match' })
-                
-                user.update({
-                    hash: newPassword
-                }).then((data) => {
-                    return res.status(200).send({
-                        success: true,
-                        message: 'Password Changed',
-                        data: {hash: data.hash}
-                    })
-                })
 
+                if (!checkPasword) {
+                    res.status(400).send({ message: 'Passwords do not match' })
+                } else {
+                    user.update({
+                        hash: newPassword
+                    }).then((data) => {
+                        return res.status(200).send({
+                            success: true,
+                            message: 'Password Changed',
+                            data: { hash: data.hash }
+                        })
+                    })
+                }
             } else {
                 return res.status(400).send({ message: 'This user doesn\'t exist' })
             }

@@ -1,0 +1,12 @@
+components:
+  parameters:
+    CasefileID:
+      in: path
+      name: id
+      description: Casefile ID
+      required: true
+      schema: 
+        type: integer
+
+
+

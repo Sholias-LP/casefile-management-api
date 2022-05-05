@@ -1,0 +1,368 @@
+paths:
+  /: 
+    get:
+      tags:
+        - Default
+      operationId: welcomeRoute
+      summary: Health Check
+      description: Base URL. **Returns an object when the server has started** 
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Message" 
+              example:
+                - success: true
+                  message: 'Welcome to the Casefile Management System API'         
+        500:
+          $ref: "#/components/responses/InternalError"
+
+
+  # Register a user                
+  /api/v1/users/register: 
+    post:
+      tags:
+        - Users
+      operationId: Register
+      summary: Register a user
+      description: Returns an object containing metadata about the new user
+      requestBody: 
+        required: true
+        content: 
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/UserRequestBody'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/UserResponse'
+              example: 
+                - success: true
+                  data: 
+                    firstName: John
+                    lastName: Doe
+                    email: John@Doe.com
+                    role: partner
+                    hash: $s2ewewe23efsfsfklsj...
+                    token: eyJhbGciOiJIUzI1NiI...
+        422:
+          $ref: "#/components/responses/BadRequestError"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+
+  # Sign-in a user                
+  /api/v1/users/signin: 
+    post:
+      tags:
+        - Users
+      operationId: signIn
+      summary: Sign-in a user
+      description: Returns an object containing metadata about the signed in user
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/SigninRequestBody'
+      responses:
+        200:
+          description: Success 
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/SigninResponse'
+              example:
+                - success: true
+                  string: Sign in Successful
+                  data: 
+                    firstName: John
+                    lastName: Doe
+                    email: John@Doe.com
+                    role: partner
+                    token: eyJhbGciOiJIUzI1NiI... 
+
+        422:
+          $ref: "#/components/responses/BadRequestError"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+
+  # Endpoint documentation to GET all Users.
+  /api/v1/users:
+    get:
+      tags:
+        - Users
+      operationId: getAllUsers
+      summary: Fetches all Users
+      description: Returns an object containing the metadata for each user.
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data: 
+                    type: array
+                    items:
+                      type: object
+                      $ref: '#/components/schemas/UserResponse'
+                    
+        422:
+          $ref: '#/components/responses/BadRequestError'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+
+
+  # Get user by role - partner or associate                
+  /api/v1/users/role: 
+    get:
+      tags:
+        - Users
+      operationId: getUsersByRole
+      summary: Fetch user(s) by role; partner or associate.
+      description: Returns an object containing metadata about the user
+      parameters:
+      - in: query
+        name: role
+        description: Role; partner or associate
+        schema: 
+          type: string
+      responses:
+        200:
+          description: Success 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message: 
+                    type: string
+                  data: 
+                    type: array
+                    items:
+                      type: object
+                      $ref: '#/components/schemas/UserResponse'
+        422:
+          $ref: "#/components/responses/BadRequestError"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+
+
+  # Reset Password           
+  /api/v1/users/resetpassword: 
+    put:
+      tags:
+        - Users
+      operationId: resetPassword
+      summary: Reset Password
+      description: Returns an object confirming the password change.
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequestBody'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResetPasswordResponse'
+              example:
+                - success: true
+                  message: Password Changed
+                  data:
+                    hash: $s2ewewe23efsfsfklsjjwio43309jsrlkrjw
+
+        422:
+          $ref: "#/components/responses/BadRequestError"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+
+
+# CASEFILE
+# Create a new casefile                
+  /api/v1/casefiles/new: 
+    post:
+      tags:
+        - Casefiles
+      operationId: addACasefile
+      summary: Create a new casefile
+      description: Returns an object containing metadata about the new casefile
+      requestBody: 
+        required: true
+        content: 
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/CasefileRequestBody'
+      responses:
+        200:
+          description: Success 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  success:
+                    type: boolean
+                  message: 
+                    type: string
+                  data:
+                    type: object
+                    $ref: '#/components/schemas/CasefileResponse'
+        422:
+          $ref: "#/components/responses/BadRequestError"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+
+# GET all Casefiles.
+  /api/v1/casefiles:
+    get:
+      tags:
+        - Casefiles
+      operationId: getAllCasefiles
+      summary: List all casefiles
+      description: Fetches all casefiles. Returns an object containing the metadata for each casefile.
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data: 
+                    type: array
+                    items:
+                      type: object
+                      $ref: '#/components/schemas/CasefileResponse'
+        422:
+          $ref: '#/components/responses/BadRequestError'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+
+# GET a specific casefile                  
+  /api/v1/casefiles/{id}:
+    get:
+      tags:
+        - Casefiles
+      operationId: getACasefile
+      summary: Fetch a specific casefile.
+      description: Returns an object containing metadata of the casefile found.
+      parameters:
+        - $ref: '#/components/parameters/CasefileID'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data: 
+                    type: object
+                    $ref: '#/components/schemas/CasefileResponse'
+        404:
+          $ref: '#/components/responses/NotFoundError'
+        422:
+          $ref: '#/components/responses/BadRequestError'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+    # Update a casefile
+    put:
+      tags:
+        - Casefiles
+      operationId: updateACasefile
+      summary: Update a casefile
+      description: Returns an object containing metadata of the updated casefile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: 
+            type: integer
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema: 
+                $ref: '#/components/schemas/CasefileRequestBody'
+      responses:
+        200:
+          description: Success 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    $ref: '#/components/schemas/CasefileResponse'
+        422:
+          $ref: "#/components/responses/BadRequestError"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+    
+    # Delete a casefile
+    delete:
+      tags:
+        - Casefiles
+      operationId: deleteACasefile
+      summary: Delete a casefile
+      description: Returns an confirming the status of the delete operation.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: 
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        404:
+          $ref: '#/components/responses/NotFoundError'
+        422:
+          $ref: '#/components/responses/BadRequestError'
+        500:
+          $ref: '#/components/responses/InternalError' 
