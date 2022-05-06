@@ -8,7 +8,7 @@ import logger from 'morgan'
 import indexRouter from './routes/index'
 import usersRouter from './routes/users.route'
 import casefilesRouter from './routes/casefile.route'
-import invalidRouter from './routes/invalidRoute'
+import invalidRouter from './routes/404.route'
 import documentationRouter from './routes/documentation.route'
 
 const app = express();
