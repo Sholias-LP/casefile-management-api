@@ -19,9 +19,9 @@ describe('USERS', () => {
         // Create database table
         await db.sequelize.sync()
         testUser = await UserModel.create({
-            firstName: 'Jossy',
-            lastName: 'Giwa',
-            email: 'Jossy@gmail.com',
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'John@gmail.com',
             hash: bcrypt.hashSync('password', 8),
             role: 'associate'
         })
@@ -48,12 +48,12 @@ describe('USERS', () => {
     describe('POST /api/v1/users/register', () => {
         it('Should Create New User', (done) => {
             const newUser = {
-                firstName: 'Jossy',
-                lastName: 'Giwa',
-                email: 'jossy@gmail.com',
+                firstName: 'Jane',
+                lastName: 'Doe',
+                email: 'Jane@gmail.com',
                 role: 'associate',
-                password: 'jossy',
-                confirmPassword: 'jossy'
+                password: 'jane',
+                confirmPassword: 'jane'
             }
             request
                 .post('/api/v1/users/register')
@@ -67,12 +67,12 @@ describe('USERS', () => {
 
         it('Should Return \'Email Invalid\'', (done) => {
             const testInvalidEmail = {
-                firstName: 'Jossy',
-                lastName: 'Giwa',
-                email: 'Jossygmail.com',
+                firstName: 'Jane',
+                lastName: 'Doe',
+                email: 'Janegmail.com',
                 role: 'associate',
-                password: 'jossy',
-                confirmPassword: 'jossy'
+                password: 'jane',
+                confirmPassword: 'jane'
             }
             request
                 .post('/api/v1/users/register')
@@ -86,12 +86,12 @@ describe('USERS', () => {
 
         it('Should Return \'Password do not Match\'', (done) => {
             const testMismatchedPassword = {
-                firstName: 'Jossy',
-                lastName: 'Giwa',
-                email: 'jossy@gmail.com',
+                firstName: 'Jane',
+                lastName: 'Doe',
+                email: 'Jane@gmail.com',
                 role: 'associate',
-                password: 'jossy',
-                confirmPassword: 'jos'
+                password: 'jane',
+                confirmPassword: 'jan'
             }
             request
                 .post('/api/v1/users/register')
@@ -110,8 +110,8 @@ describe('USERS', () => {
 
         it('Should Signin a New User', (done) => {
             const loginDetails = {
-                email: 'jossy@gmail.com',
-                password: 'jossy'
+                email: 'Jane@gmail.com',
+                password: 'jane'
             }
             request
                 .post('/api/v1/users/signin')
@@ -125,7 +125,7 @@ describe('USERS', () => {
 
         it('Should Return \'Invalid Password\'', (done) => {
             const testInvalidPassword = {
-                email: 'jossy@gmail.com',
+                email: 'Jane@gmail.com',
                 password: 'ja'
             }
             request
@@ -140,8 +140,8 @@ describe('USERS', () => {
 
         it('Should Return \'Email or password incorrect\'', (done) => {
             const testInvalidEmail = {
-                email: 'jossygmail.com',
-                password: 'jssy'
+                email: 'Janegmail.com',
+                password: 'jne'
             }
             request
                 .post('/api/v1/users/signin')
@@ -155,8 +155,8 @@ describe('USERS', () => {
 
         it('Should Return \'Email or password incorrect\'', (done) => {
             const testInvalidEmail = {
-                email: 'jossr@gwai.cam',
-                password: 'yssoj'
+                email: 'jaen@glami.cam',
+                password: 'enaj'
             }
             request
                 .post('/api/v1/users/signin')
