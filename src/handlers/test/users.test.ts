@@ -60,7 +60,9 @@ describe('USERS', () => {
                 .send(newUser)
                 .end((err, res) => {
                     expect(res.status).to.be.equal(200)
+                    expect(res.body.success).to.be.equal(true)
                     expect(res.body.message).be.equal('Sign Up Sucessful!')
+                    expect(res.body.data).to.be.an('object')
                     done()
                 })
         })
@@ -118,7 +120,9 @@ describe('USERS', () => {
                 .send(loginDetails)
                 .end((err, res) => {
                     expect(res.status).to.be.equal(200)
+                    expect(res.body.success).to.be.equal(true)
                     expect(res.body.message).be.equal('Sign in Successful')
+                    expect(res.body.data).to.be.an('object')
                     done()
                 })
         })
@@ -180,6 +184,8 @@ describe('USERS', () => {
                 .end((err, res) => {
                     expect(res.status).to.be.equal(200)
                     expect(res.body).to.be.an('object')
+                    expect(res.body.success).to.be.equal(true)
+                    expect(res.body.data).to.be.an('array')
                     done()
                 })
         })
@@ -191,14 +197,85 @@ describe('USERS', () => {
         it('Should Get Users By Role', (done) => {
             request
                 .get('/api/v1/users/role')
-                .query({role: 'partner'})
+                .query({ role: 'associate' })
                 .end((err, res) => {
                     expect(res.status).to.be.equal(200)
                     expect(res.body).to.be.an('object')
+                    expect(res.body.success).to.be.equal(true)
+                    expect(res.body.data).to.be.an('array')
                     done()
                 })
         })
     })
+
+
+
+    // Reset User Password
+    describe('PUT /users/resetpassword', () => {
+        it('Should Reset User\'s Password Given a Recognized Email', (done) => {
+            request
+                .put(`/api/v1/users/resetpassword`)
+                .send({
+                    email: 'Jane@gmail.com',
+                    newPassword: 'jane123',
+                    confirmNewPassword: 'jane123'
+                })
+                .end((err, res) => {
+                    expect(res.status).to.be.equal(200)
+                    expect(res.body).to.be.an('object')
+                    expect(res.body.success).to.be.equal(true)
+                    expect(res.body.message).to.be.equal('Password Changed')
+                    expect(res.body.data).to.be.an('object')
+                    done()
+                })
+        })
+        it('Should Return \'Invalid Email\' If Email is Invalid', (done) => {
+            request
+                .put(`/api/v1/users/resetpassword`)
+                .send({
+                    email: 'Janegmail.com',
+                    newPassword: 'jane123',
+                    confirmNewPassword: 'jane123'
+                })
+                .end((err, res) => {
+                    expect(res.status).to.be.equal(400)
+                    expect(res.body).to.be.an('object')
+                    expect(res.body.message).to.be.equal('Invalid Email')
+                    done()
+                })
+        })
+        it('Should Return \'This user doesn\'t not exist\' If Email is Not Recognized', (done) => {
+            request
+                .put(`/api/v1/users/resetpassword`)
+                .send({
+                    email: 'Janeeeee@gmail.com',
+                    newPassword: 'jane123',
+                    confirmNewPassword: 'jane123'
+                })
+                .end((err, res) => {
+                    expect(res.status).to.be.equal(400)
+                    expect(res.body).to.be.an('object')
+                    expect(res.body.message).to.be.equal('This user doesn\'t exist')
+                    done()
+                })
+        })
+        it('Should Return \'Passwords do not match\' If Passwords Do Not Match', (done) => {
+            request
+                .put('/api/v1/users/resetpassword')
+                .send({
+                    email: 'Jane@gmail.com',
+                    newPassword: 'jane123',
+                    confirmNewPassword: 'jane123456'
+                })
+                .end((err, res) => {
+                    expect(res.status).to.be.equal(400)
+                    expect(res.body).to.be.an('object')
+                    expect(res.body.message).be.equal('Passwords do not match')
+                    done()
+                })
+        })
+    })
+
 
 
 })
