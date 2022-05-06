@@ -17,7 +17,7 @@ let testUser: any = {}
 const casefileData = {
     caseID: 'SHO_478907d6-f18a-496f-9b96-c806078f9bc6',
     caseType: 'Politics',
-    client: 'Dada Taiwo',
+    client: 'Jane Doe',
     gender: 'Male',
     occupation: 'Software Developer',
     brief: 'BRIEF: is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s when an unknown printer took a galley of type.',
@@ -30,9 +30,9 @@ describe('Casefiles', () => {
     await db.sequelize.sync()
     newCasefile = await CasefileModel.create(casefileData)
     testUser = await UserModel.create({
-      firstName: 'Jossy',
-      lastName: 'Giwa',
-      email: 'jossy@gmail.com',
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'John@gmail.com',
       hash: 'password',
       role: 'partner'
     })
@@ -111,9 +111,9 @@ describe('Casefiles', () => {
         .send({
             caseID: 'SHO_478907d6',
             caseType: 'Politics',
-            client: 'Dada Taiwo',
-            gender: 'Female',
-            occupation: 'DevOps Engineer',
+            client: 'Jon Doe',
+            gender: 'male',
+            occupation: 'Software Engineer',
             brief: 'BRIEF: is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s when an unknown printer took a galley of type.',
             letter_of_engagement: 'LETTER OF ENGAGMENT: is simply dummy text of the printing and typesetting industry. \'Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s when an unknown printer took a galley.'
         })
@@ -129,7 +129,7 @@ describe('Casefiles', () => {
     it('should UPDATE a casefile if only one field is provided', (done) => {
       request
         .put(`/api/v1/casefiles/${newCasefile.id}`)
-        .send({ client: 'Dada Oluwatoyin' })
+        .send({ client: 'John Doe' })
         .end((err, res) => {
           expect(res.status).to.be.equal(200)
           expect(res.body).to.be.an('object')
