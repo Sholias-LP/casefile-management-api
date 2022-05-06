@@ -214,7 +214,7 @@ describe('USERS', () => {
     describe('PUT /users/resetpassword', () => {
         it('Should Reset User\'s Password Given a Recognized Email', (done) => {
             request
-                .put(`/api/v1/users/resetpassword`)
+                .put('/api/v1/users/resetpassword')
                 .send({
                     email: 'Jane@gmail.com',
                     newPassword: 'jane123',
@@ -231,7 +231,7 @@ describe('USERS', () => {
         })
         it('Should Return \'Invalid Email\' If Email is Invalid', (done) => {
             request
-                .put(`/api/v1/users/resetpassword`)
+                .put('/api/v1/users/resetpassword')
                 .send({
                     email: 'Janegmail.com',
                     newPassword: 'jane123',
@@ -246,7 +246,7 @@ describe('USERS', () => {
         })
         it('Should Return \'This user doesn\'t not exist\' If Email is Not Recognized', (done) => {
             request
-                .put(`/api/v1/users/resetpassword`)
+                .put('/api/v1/users/resetpassword')
                 .send({
                     email: 'Janeeeee@gmail.com',
                     newPassword: 'jane123',
