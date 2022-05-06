@@ -2,7 +2,7 @@ components:
   schemas:
     Message: 
       required:
-          - error
+          - success
           - message
       properties:
         success: 
@@ -93,29 +93,6 @@ components:
           properties:
             hash:
               type: string
-
-    # CasefileProperty:
-    #   properties: 
-    #     id:
-    #       type: integer
-    #     caseID: 
-    #       type: string
-    #     caseType:
-    #       type: string
-    #     client:
-    #       type: string
-    #     gender: 
-    #       type: string
-    #     occupation: 
-    #       type: string
-    #     brief: 
-    #       type: string
-    #     letter_of_engagement: 
-    #       type: string
-    #     createdAt:
-    #       type: string
-    #     updatedAt:
-    #       type: string
 
     CasefileRequestBody:
       properties: 
