@@ -5,12 +5,26 @@
   "engines": {
     "node": "16.x"
   },
+  "nodemonConfig": {
+    "ignore":
+      [
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        ".git",
+        "node_modules"
+      ],
+    "watch": [
+      "src"
+    ],
+    "exec": "node -r tsconfig-paths/register -r ts-node/register ./src/bin/www.ts",
+    "ext": "ts, js"
+  },
   "scripts": {
     "build": "npm run clean && tsc && npm run copy-files",
     "clean": "rimraf build/",
     "copy-files": "copyfiles -u 1 src/spec/*.yml src/spec/components/*.yml build/",
     "db:migrate": "npx sequelize-cli db:migrate",
-    "dev": "nodemon ./src/bin/www.ts",
+    "dev": "nodemon",
     "lint": "eslint \"./**/*.ts\"",
     "start": "node ./build/bin/www.js",
     "test": "cross-env NODE_ENV=test mocha -r ts-node/register \"./src/**/*.test.ts\"",
@@ -34,6 +48,7 @@
     "sequelize": "^6.18.0",
     "swagger-jsdoc": "^6.2.1",
     "swagger-ui-express": "^4.2.0",
+    "tsconfig-paths": "^4.0.0",
     "uuid": "^8.3.2",
     "validator": "^13.7.0",
     "yamljs": "^0.3.0"

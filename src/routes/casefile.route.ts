@@ -1,5 +1,5 @@
 import express from 'express'
-import Casefile from '../handlers/casefiles'
+import Casefile from '@handlers/casefiles'
 
 const router = express.Router()
 
