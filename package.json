@@ -9,7 +9,6 @@
     "ignore":
       [
         "**/*.test.ts",
-        "**/*.spec.ts",
         ".git",
         "node_modules"
       ],
