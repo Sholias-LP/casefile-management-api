@@ -16,8 +16,8 @@ module.exports = {
         "@typescript-eslint"
     ],
     "rules": {
-        semi: ['off', 'always'],
-        quotes: ['error', 'single'],
+        'semi': ['off', 'always'],
+        'quotes': ['error', 'single'],
         'comma-dangle': ['error', 'never'],
         'linebreak-style': 0,
         'object-curly-newline': 'off',

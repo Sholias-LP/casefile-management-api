@@ -2,7 +2,7 @@ import chai from 'chai'
 import supertest from 'supertest'
 import jwt from 'jsonwebtoken'
 import app from '../../app'
-import models from '../../models'
+import models from '@models/index'
 
 const secret = process.env.SECRET as string
 const { expect } = chai
@@ -108,6 +108,7 @@ describe('Casefiles', () => {
     it('should UPDATE a casefile given the id', (done) => {
       request
         .put(`/api/v1/casefiles/${newCasefile.id}`)
+        .set('authorization', `Bearer ${testUser.token}`)
         .send({
             caseID: 'SHO_478907d6',
             caseType: 'Politics',
@@ -129,6 +130,7 @@ describe('Casefiles', () => {
     it('should UPDATE a casefile if only one field is provided', (done) => {
       request
         .put(`/api/v1/casefiles/${newCasefile.id}`)
+        .set('authorization', `Bearer ${testUser.token}`)
         .send({ client: 'John Doe' })
         .end((err, res) => {
           expect(res.status).to.be.equal(200)
@@ -142,6 +144,7 @@ describe('Casefiles', () => {
     it('should UPDATE a casfile if only one field is provided', (done) => {
       request
         .put(`/api/v1/casefiles/${newCasefile.id}`)
+        .set('authorization', `Bearer ${testUser.token}`)
         .send({ caseType: 'Divorce' })
         .end((err, res) => {
           expect(res.status).to.be.equal(200)
@@ -155,6 +158,7 @@ describe('Casefiles', () => {
     it('should return no casefile if id does not exist', (done) => {
       request
         .put('/api/v1/casefiles/100000')
+        .set('authorization', `Bearer ${testUser.token}`)
         .send(casefileData)
         .end((err, res) => {
           expect(res.status).to.be.equal(404)
@@ -172,6 +176,7 @@ describe('Casefiles', () => {
     it('should add a new casefile', (done) => {
       request
         .post('/api/v1/casefiles/new')
+        .set('authorization', `Bearer ${testUser.token}`)
         .send(casefileData)
         .end((err, res) => {
           expect(res.status).to.be.equal(201)
@@ -189,6 +194,7 @@ describe('Casefiles', () => {
     it('should delete a casefile', (done) => {
       request
         .delete(`/api/v1/casefiles/${newCasefile.id}`)
+        .set('authorization', `Bearer ${testUser.token}`)
         .end((err, res) => {
           expect(res.status).to.be.equal(200)
           expect(res.body).to.be.an('object')
@@ -200,6 +206,7 @@ describe('Casefiles', () => {
     it('should display a message if casefile is not found', (done) => {
       request
         .delete('/api/v1/casefiles/99999')
+        .set('authorization', `Bearer ${testUser.token}`)
         .end((err, res) => {
           expect(res.status).to.be.equal(404)
           expect(res.body).to.be.an('object')
