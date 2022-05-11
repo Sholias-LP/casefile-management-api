@@ -1,5 +1,10 @@
 # Casefile Management API
-Tracks and records the tasks, history, and comments that are associated with a case
+Tracks and records the tasks, history, and comments that are associated with a case.
+
+> [Preview deployed API 🚀](https://casefile-management-api.herokuapp.com/) 
+
+> [Preview API Documentation 📜](https://casefile-management-api.herokuapp.com/api/v1/api-docs/) 
+
 
 ## Environments
 - Node version - v16.13.0
@@ -66,11 +71,8 @@ $ yarn start
 
 ```json
 {
-    "status": {
-        "code": 200,
-        "message": "Success"
-      },
-      "message": "Welcome to the Casefile Management Syetem API"
+    "success": true,
+    "message": "Welcome to the Casefile Management Syetem API"
 }
 ```
 
@@ -83,12 +85,12 @@ $ yarn start
 
 ```json
 {
-    "firstName":"Sheila",
-    "lastName":"Awanle",
-    "email":"sheila@sholiaslp.com",
+    "firstName":"Jane",
+    "lastName":"Doe",
+    "email":"Jane@email.com",
     "role":"partner",
-    "password":"sheila",
-    "confirmPassword":"sheila"
+    "password":"jane123",
+    "confirmPassword":"jane123"
 }
 ```
 
@@ -99,8 +101,8 @@ $ yarn start
   "success": true,
     "message": "Sign Up Sucessful!",
     "data": {
-        "fullname": "Sheila Awanle",
-        "email": "sheila@sholiaslp.com",
+        "fullname": "Jane Doe",
+        "email": "Jane@email.com",
         "role": "partner",
         "token": "{{{SAMPLE TOKEN, OBVIOUSLY}}}eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJOaWtlIiwibGFzdE5hbWUiOiJBZGVyaWJpZ2JlIiwiZW1haWwiOiJkZW5pa2VAc2hvbGlhc2xwLmNvbW1tIiwiaWQiOjQxLCJyb2xlIjoiYXNzb2NpYXRlIiwiaWF0IjoxNjUwMzA3NDUyfQ.Uab9sU0BAvqFzc7eN8523j-9qx41LqCsTvV-PAYFk10"
     }
