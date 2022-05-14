@@ -277,5 +277,34 @@ describe('USERS', () => {
     })
 
 
+    // Delete a User
+    describe('DELETE /users/:id', () => {
+        it('should delete a user', (done) => {
+            request
+                .delete(`/api/v1/users/${testUser.id}`)
+                .set('authorization', `Bearer ${testUser.token}`)
+                .end((err, res) => {
+                    expect(res.status).to.be.equal(200)
+                    expect(res.body).to.be.an('object')
+                    expect(res.body.success).to.be.equal(true)
+                    expect(res.body.message).be.equal('User Successfully Deleted')
+                    done()
+                })
+        })
+        it('should display a message if user is not found', (done) => {
+            request
+                .delete('/api/v1/users/99999')
+                .set('authorization', `Bearer ${testUser.token}`)
+                .end((err, res) => {
+                    expect(res.status).to.be.equal(404)
+                    expect(res.body).to.be.an('object')
+                    expect(res.body.success).to.be.equal(false)
+                    expect(res.body.message).be.equal('User not found.')
+                    done()
+                })
+        })
+    })
+
+
 
 })

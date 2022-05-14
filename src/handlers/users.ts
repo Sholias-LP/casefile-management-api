@@ -168,6 +168,27 @@ class User {
     }
 
 
+    // Delete a user
+    static async deleteAUser(req: Request, res: Response) {
+        const userId = Number(req.params.id)
+        const user = await UserModel.findByPk(userId)
+
+        if (!user) {
+            return res.status(404).send({
+                success: false,
+                message: 'User not found.'
+            })
+        }
+
+        return user.destroy().then(() => {
+            return res.status(200).send({
+                success: true,
+                message: 'User Successfully Deleted'
+            })
+        })
+    }
+
+
 }
 
 export default User
