@@ -20,7 +20,8 @@
       "@routes/*": ["./routes/*"],
       "@models/*": ["./models/*"],
       "@interfaces/*": ["./interfaces/*"],
-      "@handlers/*": ["./handlers/*"]
+      "@handlers/*": ["./handlers/*"],
+      "@validators/*": ["./validators/*"]
     }
   },
   "exclude": [
