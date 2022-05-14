@@ -15,14 +15,14 @@
     "moduleResolution": "node",
     "sourceMap": true,
 
-    "baseUrl": "./src",
-    "paths": {
-      "@routes/*": ["./routes/*"],
-      "@models/*": ["./models/*"],
-      "@interfaces/*": ["./interfaces/*"],
-      "@handlers/*": ["./handlers/*"],
-      "@validators/*": ["./validators/*"]
-    }
+    "baseUrl": "./src"
+    // "paths": {
+    //   "@routes/*": ["./routes/*"],
+    //   "@models/*": ["./models/*"],
+    //   "@interfaces/*": ["./interfaces/*"],
+    //   "@handlers/*": ["./handlers/*"],
+    //   "@validators/*": ["./validators/*"]
+    // }
   },
   "exclude": [
     "node_modules",

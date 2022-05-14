@@ -6,11 +6,11 @@ import path from 'path'
 import cookieParser from 'cookie-parser'
 import logger from 'morgan'
 
-import indexRouter from '@routes/index.route'
-import usersRouter from '@routes/users.route'
-import casefilesRouter from '@routes/casefile.route'
-import invalidRouter from '@routes/404.route'
-import documentationRouter from '@routes/documentation.route'
+import indexRouter from './routes/index.route'
+import usersRouter from './routes/users.route'
+import casefilesRouter from './routes/casefile.route'
+import invalidRouter from './routes/404.route'
+import documentationRouter from './routes/documentation.route'
 
 const app = express();
 app.use(cors())
