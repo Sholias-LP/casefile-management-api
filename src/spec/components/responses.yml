@@ -27,3 +27,9 @@ components:
           example: 
             - success: false
               message: Internal server error
+    UnauthorizedError:
+      description: Authentication information is missing or invalid
+      headers:
+        WWW_Authenticate:
+          schema:
+            type: string
