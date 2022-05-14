@@ -11,8 +11,6 @@
     "noImplicitAny": true,
     "skipLibCheck": true,
     "allowJs": true,
-
-    "moduleResolution": "node",
     "sourceMap": true
   },
   "exclude": [

@@ -2,7 +2,7 @@ import chai from 'chai'
 import supertest from 'supertest'
 import jwt from 'jsonwebtoken'
 import app from '../../app'
-import models from '@models/index'
+import models from '../../models/index'
 
 const secret = process.env.SECRET as string
 const { expect } = chai
