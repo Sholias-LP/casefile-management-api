@@ -403,3 +403,183 @@ paths:
           $ref: "#/components/responses/BadRequestError"
         500:
           $ref: "#/components/responses/InternalError"
+
+  # TRANSACTION
+  # Create a new transaction
+  /api/v1/transaction/new:
+    post:
+      tags:
+        - Transactions
+      operationId: addATransaction
+      summary: Create a new transaction
+      description: Returns an object containing metadata about the new transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionRequestBody"
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/TransactionResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        422:
+          $ref: "#/components/responses/BadRequestError"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  # GET all Transaction.
+  /api/v1/transactions:
+    get:
+      tags:
+        - Transactions
+      operationId: getAllTransactions
+      summary: List all transactions
+      description: Fetches all transactions. Returns an object containing the metadata for each transaction.
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/TransactionResponse"
+        422:
+          $ref: "#/components/responses/BadRequestError"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  # GET a specific transaction
+  /api/v1/transactions/{id}:
+    get:
+      tags:
+        - Transactions
+      operationId: getATransaction
+      summary: Fetch a specific transaction.
+      description: Returns an object containing metadata of the transaction found.
+      parameters:
+        - $ref: "#/components/parameters/TransactionID"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/TransactionResponse"
+        404:
+          $ref: "#/components/responses/NotFoundError"
+        422:
+          $ref: "#/components/responses/BadRequestError"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+    # Update a transaction
+    put:
+      tags:
+        - Transactions
+      operationId: updateATransaction
+      summary: Update a transaction
+      description: Returns an object containing metadata of the updated transaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionRequestBody"
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/TransactionResponse"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        422:
+          $ref: "#/components/responses/BadRequestError"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+    # Delete a casefile
+    delete:
+      tags:
+        - Transactions
+      operationId: deleteATransaction
+      summary: Delete a transaction
+      description: Returns an object confirming the status of the delete operation.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          $ref: "#/components/responses/NotFoundError"
+        422:
+          $ref: "#/components/responses/BadRequestError"
+        500:
+          $ref: "#/components/responses/InternalError"

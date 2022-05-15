@@ -135,3 +135,45 @@ components:
           type: string
         updatedAt:
           type: string
+    
+    TransactionRequestBody:
+      properties: 
+        id:
+          type: integer
+        transaction_id: 
+          type: string
+        transaction_type:
+          type: string
+        client:
+          type: string
+        gender: 
+          type: string
+        occupation: 
+          type: string
+        transaction_summary: 
+          type: string
+        cost: 
+          type: integer
+
+    TransactionResponse:
+      properties:
+        id:
+          type: integer
+        transaction_id: 
+          type: string
+        transaction_type:
+          type: string
+        client:
+          type: string
+        gender: 
+          type: string
+        occupation: 
+          type: string
+        transaction_summary: 
+          type: string
+        cost: 
+          type: integer
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
