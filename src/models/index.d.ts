@@ -14,10 +14,7 @@ type UserAttributes = {
   hash: string
 }
 
-// we're telling the Model that 'id' is optional
-// when creating an instance of the model (such as using Model.create()).
 type UserCreationAttributes = Optional<UserAttributes, 'id'>
-
 class User extends Model<UserAttributes, UserCreationAttributes> {
   declare id: number
   declare firstName: string
@@ -53,4 +50,32 @@ class Casefile extends Model<CasefileAttributes, CasefileCreationAttributes> {
   declare occupation: string
   declare brief: string
   declare letter_of_engagement:string
+}
+
+
+/* -------------------------------- */
+/*            Transaction              */
+/* -------------------------------- */
+
+type TransactionAttributes = {
+  id: number
+  transaction_id: string
+  transaction_type: string
+  client: string
+  gender: string
+  occupation: string
+  transaction_summary: string
+  cost:string
+}
+
+type TransactionCreationAttributes = Optional<TransactionAttributes, 'id'>
+class Transaction extends Model<TransactionAttributes, TransactionCreationAttributes> {
+  declare id: number
+  declare transaction_id: string
+  declare transaction_type: string
+  declare client: string
+  declare gender: string
+  declare occupation: string
+  declare transaction_summary: string
+  declare cost:number
 }
