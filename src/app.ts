@@ -9,6 +9,7 @@ import logger from 'morgan'
 import indexRouter from './routes/index.route'
 import usersRouter from './routes/users.route'
 import casefilesRouter from './routes/casefile.route'
+import transactionsRouter from './routes/transaction.route'
 import invalidRouter from './routes/404.route'
 import documentationRouter from './routes/documentation.route'
 
@@ -32,6 +33,7 @@ app.use('/api/v1/api-docs', documentationRouter)
 app.use('/', indexRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/', casefilesRouter);
+app.use('/api/v1/transactions/', transactionsRouter);
 app.use('/', invalidRouter);
 
 // catch 404 and forward to error handler
