@@ -63,7 +63,7 @@ $ yarn start
 
 ---
 
-## Sample ENDPOINTS
+<!-- ## Sample ENDPOINTS
 
 **Root route** - `{{baseUrl}}/` - method (GET)
 
@@ -148,7 +148,7 @@ $ yarn start
         "createdAt": "2022-04-18T18:50:59.895Z"
     }
 }
-```
+``` -->
 
 
 ---
