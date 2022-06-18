@@ -15,7 +15,7 @@ interface ITransactionDocument {
     letter_of_engagement: string;
     service_fee: number;
     deposit: number[];
-    expenses: {}[];
+    expenses: any[];
     createdAt: Date;
     updatedAt: Date;
 }

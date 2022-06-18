@@ -1,12 +1,12 @@
-require('dotenv').config()
-require('tsconfig-paths/register')
+import 'dotenv/config'
+import 'tsconfig-paths/register'
 import createError from 'http-errors'
 import express, { Request, Response } from 'express'
 import cors from 'cors'
 import path from 'path'
 import cookieParser from 'cookie-parser'
 import logger from 'morgan'
-import helmet from "helmet";
+import helmet from 'helmet';
 import './db/mongodb'
 
 

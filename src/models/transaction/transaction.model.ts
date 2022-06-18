@@ -4,7 +4,7 @@ import ITransaction from './transaction.interface'
 const transactionSchema = new Schema<ITransaction>({
     author: {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: 'User',
         required: true
     },
     transaction_id: {
@@ -15,7 +15,7 @@ const transactionSchema = new Schema<ITransaction>({
     transaction_type: {
         type: String,
         required: [true, 'Transaction type is required'],
-        lowercase: true,
+        lowercase: true
     }, 
     client: {
         type: String,

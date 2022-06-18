@@ -4,7 +4,7 @@ import ICasefile from './casefile.interface'
 const casefileSchema = new Schema<ICasefile>({
     author: {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: 'User',
         required: true
     },
     casefile_id: {
@@ -15,7 +15,7 @@ const casefileSchema = new Schema<ICasefile>({
     case_type: {
         type: String,
         required: [true, 'Casefile type is required'],
-        lowercase: true,
+        lowercase: true
     },
     client: {
         type: String,
@@ -25,7 +25,7 @@ const casefileSchema = new Schema<ICasefile>({
     gender: {
         type: String,
         required: [true, 'Gender is required'],
-        lowercase: true,
+        lowercase: true
     },
     occupation: {
         type: String,

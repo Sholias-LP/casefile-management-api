@@ -155,7 +155,7 @@ class User {
                     if (!document) {
                         return res.status(400).send({
                             success: false,
-                            message: 'This user doesn\'t exist',
+                            message: 'This user doesn\'t exist'
                         })
                     } else {
                         if (!checkPasword) {

@@ -40,8 +40,7 @@ export const checkUser = (req: Request, res: Response, next: NextFunction) => {
           message: 'Access is Denied'
         })
       } else {
-        let user = await userModel.findById((decodedToken as IDecodedToken).id)
-        // console.log((decodedToken as IDecodedToken).id)
+        const user = await userModel.findById((decodedToken as IDecodedToken).id)
         res.locals.user = user
         next()
       }

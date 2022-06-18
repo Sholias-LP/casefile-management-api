@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { Types } from 'mongoose';
 
 interface ITransaction {
     _id: Types.ObjectId;
@@ -11,7 +11,7 @@ interface ITransaction {
     transaction_summary: string;
     service_fee: number;
     deposit: number[];
-    expenses: {}[];
+    expenses: any[];
     status: string;
     isDeleted: boolean
     createdAt: Date;

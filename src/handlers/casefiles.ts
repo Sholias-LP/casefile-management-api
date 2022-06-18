@@ -15,8 +15,8 @@ interface ICasefileDocument {
     letter_of_engagement: string;
     service_fee: number;
     deposit: number[];
-    expenses: {}[];
-    court_sitting: {}[];
+    expenses: any[];
+    court_sitting: any[];
     createdAt: Date;
     updatedAt: Date;
     limit: any;
