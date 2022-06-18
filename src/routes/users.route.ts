@@ -5,12 +5,26 @@ import authorizeUser from '../validators/authorization'
 
 const router = express.Router()
 
-router.post('/register',  User.Register);
-router.post('/signin',  User.signIn);
-router.get('/',  User.getAllUsers);
-router.get('/role',  User.getUsersByRole);
-router.put('/resetpassword',  User.resetPassword);
-router.delete('/:id', validateToken, authorizeUser, User.deleteAUser);
+router
+    .route('/auth/register')
+    .post(User.Register)
+
+router
+    .route('/auth/signin')
+    .post(User.signIn)
+
+router
+    .route('/:id')
+    .delete(validateToken, authorizeUser, User.deleteAUser)
+
+router
+    .route('/')
+    .get(User.getAllUsers)
+
+router
+    .route('/resetpassword')
+    .put(User.resetPassword)
+
 
 
 export default router

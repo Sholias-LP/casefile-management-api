@@ -6,11 +6,20 @@ import authorizeUser from '../validators/authorization'
 const router = express.Router()
 
 
-router.post('/new', validateToken, authorizeUser, Transaction.addATransaction);
-router.get('/',  Transaction.getAllTransactions);
-router.get('/:id',  Transaction.getATransaction);
-router.put('/:id', validateToken, authorizeUser, Transaction.updateATransaction);
-router.delete('/:id', validateToken, authorizeUser, Transaction.deleteATransaction);
+router
+    .route('/new')
+    .post(validateToken, authorizeUser, Transaction.addATransaction)
+
+router
+    .route('/')
+    .get(Transaction.getAllTransactions)
+
+router
+    .route('/:id')
+    .get(Transaction.getATransaction)
+    .put(validateToken, authorizeUser, Transaction.updateATransaction)
+    .delete(validateToken, authorizeUser, Transaction.deleteATransaction)
+
 
 
 export default router

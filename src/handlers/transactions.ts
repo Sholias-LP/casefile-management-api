@@ -1,25 +1,54 @@
 import { Request, Response } from 'express'
 import { BaseHandler } from '../interfaces/handler'
-import models from '../models/index.js'
-import { v4 as uuidv4 } from 'uuid';
+import TransactionsModel from '../models/transaction/transaction.model'
+// import { v4 as uuidv4 } from 'uuid';
+import { QueryOptions, Types } from 'mongoose'
 
-const TransactionsModel = models.Transaction
+interface ITransactionDocument {
+    save: any;
+    transaction_id: string;
+    transaction_type: string;
+    client: string;
+    gender: string;
+    occupation: string;
+    brief: string;
+    letter_of_engagement: string;
+    service_fee: number;
+    deposit: number[];
+    expenses: {}[];
+    createdAt: Date;
+    updatedAt: Date;
+}
 
+function alphanumeric_unique() {
+    return Math.random().toString(36).split('').filter(function (value, index, self) {
+        return self.indexOf(value) === index;
+    }).join('').substr(2, 5);
+}
 class Transactions extends BaseHandler {
 
-    // Add a new Transaction
-    static addATransaction(req: Request, res: Response) {
-        TransactionsModel.create({
-            id: req.body.id,
-            transaction_id: `SHO_${uuidv4()}`,
-            transaction_type: req.body.transaction_type,
-            client: req.body.client,
-            gender: req.body.gender,
-            occupation: req.body.occupation,
-            transaction_summary: req.body.transaction_summary,
-            cost: req.body.cost
-        })
-            .then((newTransaction) => {
+
+    static async addATransaction(req: Request, res: Response) {
+
+        const { transactionType, client, gender, occupation, brief, letterOfEngagement, serviceFee, deposit, expenses } = req.body
+
+        try {
+
+            const newTransaction = new TransactionsModel({
+                author: res.locals.user._id,
+                transaction_id: `#${alphanumeric_unique()}`,
+                transaction_type: transactionType,
+                client: client,
+                gender: gender,
+                occupation: occupation,
+                brief: brief,
+                letter_of_engagement: letterOfEngagement,
+                service_fee: serviceFee,
+                deposit: deposit,
+                expenses: expenses
+            })
+
+            await newTransaction.save().then((newTransaction) => {
                 return res
                     .status(201)
                     .send({
@@ -27,105 +56,172 @@ class Transactions extends BaseHandler {
                         message: 'Transaction added successfully',
                         data: newTransaction
                     })
-            })
-            .catch((err) => console.log(err))
+            }).catch((err) => { throw new Error((err as Error).message) })
+        } catch (error) {
+            throw new Error((error as Error).message);
+        }
+
     }
 
 
     // Get all transactions
     static getAllTransactions(req: Request, res: Response) {
-        TransactionsModel.findAll().then((transactions) => {
-            return res.status(200).send({
-                success: true,
-                message: 'Transactions retrieved successfully',
-                data: transactions
+
+        try {
+
+            const { transactionType, client, author } = req.query
+            const filters = { isDeleted: false }
+
+            if (transactionType) (filters as any).transaction_type = transactionType
+            if (client) (filters as any).client = client
+            if (author) (filters as any).author = (author as QueryOptions)
+
+            console.table(filters)
+
+            TransactionsModel.find(filters).then((transactions) => {
+                return res.status(200).send({
+                    success: true,
+                    message: 'Transactions retrieved successfully',
+                    count: transactions.length,
+                    data: transactions
+                })
             })
-        })
+
+        } catch (error) {
+            throw new Error((error as Error).message);
+        }
     }
 
 
     // Get a specific transaction
     static getATransaction(req: Request, res: Response) {
-        const id = Number(req.params.id)
-        TransactionsModel.findOne({
-            where: { id }
-        }).then((transaction) => {
-            if (!transaction) return res.status(404).send({ success: false, message: 'Transaction not found' })
-            return res.status(200).send({
-                success: true,
-                message: 'Transaction retrieved successfully',
-                data: transaction
-            })
-        })
+
+        try {
+
+            const id = req.params.id
+
+            if (Types.ObjectId.isValid(id)) {
+                TransactionsModel.find({ _id: id })
+                    .then((transaction) => {
+                        if (!transaction) {
+                            return res.status(404).send({
+                                success: false,
+                                message: 'Transaction not found'
+                            })
+                        } else {
+                            return res.status(200).send({
+                                success: true,
+                                message: 'Transaction retrieved successfully',
+                                data: transaction
+                            })
+                        }
+                    })
+            } else {
+                return res.status(404).send({ success: false, message: 'Invalid Id' })
+            }
+        } catch (error) {
+            throw new Error((error as Error).message)
+        }
     }
+
 
 
     // Update a transaction
     static updateATransaction(req: Request, res: Response) {
-        const transactionId = Number(req.params.id)
-        TransactionsModel.findByPk(transactionId).then((transaction) => {
-            if (transaction) {
-                const {
-                    transaction_id,
-                    transaction_type,
-                    client,
-                    gender,
-                    occupation,
-                    transaction_summary,
-                    cost
-                } = req.body
-                return transaction
-                    .update({
-                        transaction_id: transaction_id || transaction.transaction_id,
-                        transaction_type: transaction_type || transaction.transaction_type,
-                        client: client || transaction.client,
-                        gender: gender || transaction.gender,
-                        occupation: occupation || transaction.occupation,
-                        transaction_summary: transaction_summary || transaction.transaction_summary,
-                        cost: cost || transaction.cost
-                    })
-                    .then((transaction) => {
-                        return res.status(200).send({
-                            success: true,
-                            message: 'Transaction Updated Successfully',
-                            data: transaction
+
+        try {
+            const transactionId = req.params.id
+            const { transactionID, transactionType, client, gender, occupation, brief, letterOfEngagement, serviceFee, deposit, expenses } = req.body
+
+            if (Types.ObjectId.isValid(transactionId)) {
+
+                return TransactionsModel.findById({ _id: transactionId }, (error: Error, document: ITransactionDocument) => {
+                    if (error) res.send({ success: false, message: 'Update failed: ' + error })
+
+                    if (document) {
+
+                        document.transaction_id = transactionID || document.transaction_id,
+                            document.transaction_type = transactionType || document.transaction_type,
+                            document.client = client || document.client,
+                            document.gender = gender || document.gender,
+                            document.occupation = occupation || document.occupation,
+                            document.brief = brief || document.brief,
+                            document.letter_of_engagement = letterOfEngagement || document.letter_of_engagement,
+                            document.service_fee = serviceFee || document.service_fee
+                            document.deposit = deposit || document.deposit
+                            document.expenses = expenses || document.expenses
+                            // if (deposit) document.deposit[0] = deposit
+                            // if (expenses) document.expenses[0] = expenses
+
+
+                        document.save().then((transaction: ITransactionDocument) => {
+                            return res.status(200).send({
+                                success: true,
+                                message: 'Transaction Updated Successfully',
+                                data: transaction
+                            })
+                        }).catch((error: Error) => {
+                            throw new Error(error.message);
                         })
-                    })
+
+                    } else {
+                        return res.status(404).send(
+                            {
+                                success: false,
+                                message: 'Transaction not found'
+                            })
+                    }
+
+                })
+
             } else {
-                return res
-                    .status(404)
-                    .send({
+                return res.status(404).send(
+                    {
                         success: false,
-                        message: 'Transaction not found! Enter a valid ID'
+                        message: 'Invalid ID'
                     })
             }
-        })
+        } catch (error) {
+            throw new Error((error as Error).message);
+        }
+
     }
 
 
     // Delete a transaction
     static async deleteATransaction(req: Request, res: Response) {
-        const transactionId = Number(req.params.id)
-        const transaction = await TransactionsModel.findByPk(transactionId)
+        try {
 
-        if (!transaction) {
-            return res.status(404).send({
-                success: false,
-                message: 'Transaction not found. Confirm ID'
-            })
+            const transactionId = req.params.id
+
+            if (Types.ObjectId.isValid(transactionId)) {
+                const transaction = await TransactionsModel.findByIdAndDelete(transactionId)
+
+                if (!transaction) {
+                    return res.status(404).send({
+                        success: false,
+                        message: 'Transaction not found.'
+                    })
+                } else {
+                    return res.status(200).send({
+                        success: true,
+                        message: 'Transaction Successfully Deleted'
+                    })
+                }
+            } else {
+                return res.status(404).send({
+                    success: false,
+                    message: 'Invalid ID'
+                })
+            }
+
+
+        } catch (error) {
+            throw new Error((error as Error).message);
         }
-
-        return transaction.destroy().then(() => {
-            return res.status(200).send({
-                success: true,
-                message: 'Transaction Successfully Deleted'
-            })
-        })
     }
 
-
 }
-
 
 
 export default Transactions
