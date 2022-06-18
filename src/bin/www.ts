@@ -35,7 +35,7 @@ const normalizePort = (val: any) => {
 }
 
 /**
- * Event listener for HTTP server "error" event.
+ * Event listener for HTTP server 'error' event.
  */
 
 const onError = (error: any) => {
@@ -61,7 +61,7 @@ const onError = (error: any) => {
 }
 
 /**
- * Event listener for HTTP server "listening" event.
+ * Event listener for HTTP server 'listening' event.
  */
 
 const onListening = () => {

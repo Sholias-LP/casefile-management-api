@@ -1,10 +1,14 @@
-require('tsconfig-paths/register')
+import 'dotenv/config'
+import 'tsconfig-paths/register'
 import createError from 'http-errors'
-import express, { Request, Response } from 'express';
+import express, { Request, Response } from 'express'
 import cors from 'cors'
 import path from 'path'
 import cookieParser from 'cookie-parser'
 import logger from 'morgan'
+import helmet from 'helmet';
+import './db/mongodb'
+
 
 import indexRouter from './routes/index.route'
 import usersRouter from './routes/users.route'
@@ -12,9 +16,11 @@ import casefilesRouter from './routes/casefile.route'
 import transactionsRouter from './routes/transaction.route'
 import invalidRouter from './routes/404.route'
 import documentationRouter from './routes/documentation.route'
+import { checkUser } from './validators/validate-token'
 
 const app = express();
 app.use(cors())
+app.use(helmet());
 
 const options: cors.CorsOptions = {
   origin: '*',
@@ -22,19 +28,21 @@ const options: cors.CorsOptions = {
   optionsSuccessStatus: 204
 }
 
-app.use(cors(options));
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors(options))
+app.use(logger('dev'))
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use(express.static(path.join(__dirname, 'public')))
 
+app.get('*', checkUser)
+app.post('*', checkUser)
 app.use('/api/v1/api-docs', documentationRouter)
-app.use('/', indexRouter);
-app.use('/api/v1/users', usersRouter);
-app.use('/api/v1/', casefilesRouter);
-app.use('/api/v1/transactions/', transactionsRouter);
-app.use('/', invalidRouter);
+app.use('/', indexRouter)
+app.use('/api/v1/users', usersRouter)
+app.use('/api/v1/', casefilesRouter)
+app.use('/api/v1/transactions/', transactionsRouter)
+app.use('/', invalidRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

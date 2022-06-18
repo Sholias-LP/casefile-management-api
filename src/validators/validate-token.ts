@@ -1,8 +1,17 @@
 import jwt from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import { getToken } from '../utils/token'
+import { ObjectId } from 'mongoose'
+import userModel from '../models/user/user.model'
+
 
 const secret = process.env.SECRET as string
+
+export interface IDecodedToken {
+  id: ObjectId;
+  email: string;
+  first_name: string
+}
 
 const validateToken = (req: Request, res: Response, next: NextFunction) => {
   const token = getToken(req)
@@ -13,9 +22,34 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
       return res.status(401).send({
         message: 'Access is Denied'
       })
-    }
+    }    
   })
   next()
+}
+
+
+// Check Current User
+export const checkUser = (req: Request, res: Response, next: NextFunction) => {
+  const token = getToken(req)
+
+  if (token) {
+    jwt.verify(token, secret, async (err, decodedToken) => {
+      if (err) {
+        res.locals.user = null
+        return res.status(401).send({
+          message: 'Access is Denied'
+        })
+      } else {
+        const user = await userModel.findById((decodedToken as IDecodedToken).id)
+        res.locals.user = user
+        next()
+      }
+    })
+  } else {
+    res.locals.user = null
+    next()
+  }
+  
 }
 
 export default validateToken
