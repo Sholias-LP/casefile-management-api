@@ -11,7 +11,10 @@ interface ITransaction {
     transaction_summary: string;
     service_fee: number;
     deposit: number[];
-    expenses: any[];
+    expenses: {
+        amount: number, 
+        note: string
+    }[];
     status: string;
     isDeleted: boolean
     createdAt: Date;

@@ -1,4 +1,4 @@
-module.exports = {
+{
     "env": {
         "browser": true,
         "es2021": true
@@ -16,12 +16,12 @@ module.exports = {
         "@typescript-eslint"
     ],
     "rules": {
-        'semi': ['off', 'always'],
-        'quotes': ['error', 'single'],
-        'comma-dangle': ['error', 'never'],
-        'linebreak-style': 0,
-        'object-curly-newline': 'off',
-        'implicit-arrow-linebreak': 'off',
-        'operator-linebreak': 'off'
+        "semi": ["off", "always"],
+        "quotes": ["error", "single"],
+        "comma-dangle": ["error", "never"],
+        "linebreak-style": 0,
+        "object-curly-newline": "off",
+        "implicit-arrow-linebreak": "off",
+        "operator-linebreak": "off"
     }
-};
+}

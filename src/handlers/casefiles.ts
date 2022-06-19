@@ -33,7 +33,7 @@ class Casefiles extends BaseHandler {
 
     // Add a new Casefile
     static async addACasefile(req: Request, res: Response) {
-
+        
         try {
 
             const { caseType, client, gender, occupation, brief, letterOfEngagement, serviceFee, deposit, expenses, courtSitting } = req.body
@@ -135,7 +135,7 @@ class Casefiles extends BaseHandler {
 
         try {
             const casefileId = req.params.id
-            const { caseID, casefileType, client, gender, occupation, brief, letterOfEngagement, serviceFee, deposit, expenses, courtSitting } = req.body
+            const { casefileType, client, gender, occupation, brief, letterOfEngagement, serviceFee, deposit, expenses, courtSitting } = req.body
 
             if (Types.ObjectId.isValid(casefileId)) {
 
@@ -144,8 +144,7 @@ class Casefiles extends BaseHandler {
 
                     if (document) {
 
-                        document.casefile_id = caseID || document.casefile_id,
-                            document.casefile_type = casefileType || document.casefile_type,
+                        document.casefile_type = casefileType || document.casefile_type,
                             document.client = client || document.client,
                             document.gender = gender || document.gender,
                             document.occupation = occupation || document.occupation,

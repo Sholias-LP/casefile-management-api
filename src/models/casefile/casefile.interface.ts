@@ -13,8 +13,14 @@ interface ICasefile {
     letter_of_engagement: string;
     service_fee: number;
     deposit: number[];
-    expenses: any[];
-    court_sitting: any[];
+    expenses: {
+        amount: number, 
+        note: string
+    }[];
+    court_sitting: {
+        date: string, 
+        note: string
+    }[];
     status: string;
     isDeleted: boolean
     createdAt: Date;

@@ -2,6 +2,9 @@
   "name": "casefile-management-api",
   "version": "0.0.0",
   "private": true,
+  "repository": "https://github.com/Sholias-LP/casefile-management-api",
+  "author": "Giwa Jossy <giwajossy@gmail.com>",
+  "license": "MIT",
   "engines": {
     "node": "16.x"
   },

@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { BaseHandler } from '../interfaces/handler'
 import TransactionsModel from '../models/transaction/transaction.model'
-// import { v4 as uuidv4 } from 'uuid';
 import { QueryOptions, Types } from 'mongoose'
 
 interface ITransactionDocument {
@@ -31,7 +30,7 @@ class Transactions extends BaseHandler {
     static async addATransaction(req: Request, res: Response) {
 
         const { transactionType, client, gender, occupation, brief, letterOfEngagement, serviceFee, deposit, expenses } = req.body
-
+        
         try {
 
             const newTransaction = new TransactionsModel({
@@ -131,7 +130,7 @@ class Transactions extends BaseHandler {
 
         try {
             const transactionId = req.params.id
-            const { transactionID, transactionType, client, gender, occupation, brief, letterOfEngagement, serviceFee, deposit, expenses } = req.body
+            const { transactionType, client, gender, occupation, brief, letterOfEngagement, serviceFee, deposit, expenses } = req.body
 
             if (Types.ObjectId.isValid(transactionId)) {
 
@@ -140,18 +139,17 @@ class Transactions extends BaseHandler {
 
                     if (document) {
 
-                        document.transaction_id = transactionID || document.transaction_id,
-                            document.transaction_type = transactionType || document.transaction_type,
+                        document.transaction_type = transactionType || document.transaction_type,
                             document.client = client || document.client,
                             document.gender = gender || document.gender,
                             document.occupation = occupation || document.occupation,
                             document.brief = brief || document.brief,
                             document.letter_of_engagement = letterOfEngagement || document.letter_of_engagement,
                             document.service_fee = serviceFee || document.service_fee
-                            document.deposit = deposit || document.deposit
-                            document.expenses = expenses || document.expenses
-                            // if (deposit) document.deposit[0] = deposit
-                            // if (expenses) document.expenses[0] = expenses
+                        document.deposit = deposit || document.deposit
+                        document.expenses = expenses || document.expenses
+                        // if (deposit) document.deposit[0] = deposit
+                        // if (expenses) document.expenses[0] = expenses
 
 
                         document.save().then((transaction: ITransactionDocument) => {
