@@ -144,7 +144,6 @@ class User {
             const checkPasword = newPassword === confirmNewPassword
 
             const email = res.locals.user.email
-            console.log("Current User Email: ", email)
 
             const query = { email: email }
             const update = { hash: bcrypt.hashSync(newPassword, 10) }
