@@ -11,6 +11,7 @@ import './db/mongodb'
 
 
 import indexRouter from './routes/index.route'
+import authRouter from './routes/auth.route'
 import usersRouter from './routes/users.route'
 import casefilesRouter from './routes/casefile.route'
 import transactionsRouter from './routes/transaction.route'
@@ -39,6 +40,7 @@ app.get('*', checkUser)
 app.post('*', checkUser)
 app.use('/api/v1/api-docs', documentationRouter)
 app.use('/', indexRouter)
+app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/users', usersRouter)
 app.use('/api/v1/', casefilesRouter)
 app.use('/api/v1/transactions/', transactionsRouter)

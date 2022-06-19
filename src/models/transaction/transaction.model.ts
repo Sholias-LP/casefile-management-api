@@ -43,7 +43,7 @@ const transactionSchema = new Schema<ITransaction>({
     },
     expenses: [{
         amount: Number,
-        description: String
+        note: String
     }],
     status: {
         type: String,

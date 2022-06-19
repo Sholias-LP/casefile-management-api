@@ -47,11 +47,11 @@ const casefileSchema = new Schema<ICasefile>({
     },
     expenses: [{
         amount: Number,
-        description: String
+        note: String
     }],
     court_sitting: [{
         date: String,
-        description: String
+        note: String
     }],
     status: {
         type: String,
