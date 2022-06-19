@@ -140,36 +140,33 @@ class User {
 
         try {
 
-            const { email, newPassword, confirmNewPassword } = req.body
+            const { newPassword, confirmNewPassword } = req.body
             const checkPasword = newPassword === confirmNewPassword
 
-            if (!isEmail(email)) {
-                return res.status(400).send({ message: 'Invalid Email' })
-            } else {
+            const email = res.locals.user.email
 
-                const query = { email: email }
-                const update = { hash: bcrypt.hashSync(newPassword, 10) }
-                UserModel.findOneAndUpdate(query, { $set: update }, (error: any, document: any) => {
-                    if (error) throw new Error(`Error: ${error.message}`);
+            const query = { email: email }
+            const update = { hash: bcrypt.hashSync(newPassword, 10) }
+            UserModel.findOneAndUpdate(query, { $set: update }, (error: any, document: any) => {
+                if (error) throw new Error(`Error: ${error.message}`);
 
-                    if (!document) {
-                        return res.status(400).send({
-                            success: false,
-                            message: 'This user doesn\'t exist'
-                        })
+                if (!document) {
+                    return res.status(400).send({
+                        success: false,
+                        message: 'This user doesn\'t exist'
+                    })
+                } else {
+                    if (!checkPasword) {
+                        res.status(400).send({ message: 'Passwords do not match' })
                     } else {
-                        if (!checkPasword) {
-                            res.status(400).send({ message: 'Passwords do not match' })
-                        } else {
-                            return res.status(200).send({
-                                success: true,
-                                message: 'Password Changed'
-                            })
-                        }
+                        return res.status(200).send({
+                            success: true,
+                            message: 'Password Changed'
+                        })
                     }
+                }
 
-                })
-            }
+            })
 
         } catch (error) {
             throw new Error((error as Error).message)

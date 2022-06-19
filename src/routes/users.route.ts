@@ -13,10 +13,5 @@ router
     .route('/')
     .get(User.getAllUsers)
 
-router
-    .route('/resetpassword')
-    .put(User.resetPassword)
-
-
 
 export default router
