@@ -38,6 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('*', checkUser)
 app.post('*', checkUser)
+app.put('*', checkUser)
 app.use('/api/v1/api-docs', documentationRouter)
 app.use('/', indexRouter)
 app.use('/api/v1/auth', authRouter)
