@@ -1,7 +1,7 @@
 import express from 'express'
 import Casefile from '../handlers/casefiles'
-import validateToken, { checkUser } from '../validators/validate-token'
-import authorizeUser from '../validators/authorization'
+import validateToken, { checkUser } from '../middleware/validate-token'
+import authorizeUser from '../middleware/authorization'
 
 const router = express.Router()
 

@@ -1,7 +1,7 @@
 import express from 'express'
 import Transaction from '../handlers/transactions'
-import validateToken from '../validators/validate-token'
-import authorizeUser from '../validators/authorization'
+import validateToken from '../middleware/validate-token'
+import authorizeUser from '../middleware/authorization'
 
 const router = express.Router()
 

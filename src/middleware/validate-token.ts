@@ -31,7 +31,7 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
 // Check Current User
 export const checkUser = (req: Request, res: Response, next: NextFunction) => {
   const token = getToken(req)
-
+      
   if (token) {
     jwt.verify(token, secret, async (err, decodedToken) => {
       if (err) {

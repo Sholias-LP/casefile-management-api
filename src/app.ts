@@ -17,10 +17,9 @@ import casefilesRouter from './routes/casefile.route'
 import transactionsRouter from './routes/transaction.route'
 import invalidRouter from './routes/404.route'
 import documentationRouter from './routes/documentation.route'
-import { checkUser } from './validators/validate-token'
+import { checkUser } from './middleware/validate-token'
 
 const app = express();
-app.use(cors())
 app.use(helmet());
 
 const options: cors.CorsOptions = {

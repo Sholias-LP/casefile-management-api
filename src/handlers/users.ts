@@ -41,6 +41,7 @@ class User {
                                 fullname: `${user.first_name} ${user.last_name}`,
                                 email: user.email,
                                 role: user.role,
+                                avatar: user.avatar,
                                 token: jwt.sign(
                                     {
                                         first_name: firstName,
@@ -62,6 +63,7 @@ class User {
             throw new Error((error as Error).message);
         }
     }
+
 
     // Sign-In User
     static async signIn(req: Request, res: Response) {
