@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { BaseHandler } from '../interfaces/handler'
 import CasefileModel from '../models/casefile/casefile.model'
-// import { v4 as uuidv4 } from 'uuid';
 import { QueryOptions, Types } from 'mongoose'
 
 interface ICasefileDocument {

@@ -7,6 +7,7 @@ interface IUser {
     email: string;
     role: string;
     hash: string;  
+    avatar: string;
     isDeleted: boolean;
     createdAt: Date;
     updatedAt: Date;

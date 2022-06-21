@@ -28,6 +28,9 @@ const userSchema = new Schema<IUser>({
         type: String,
         required: true
     },
+    avatar: {
+        type: String
+    },
     isDeleted: {
         type: Boolean,
         default: false
@@ -43,16 +46,19 @@ const userSchema = new Schema<IUser>({
     }
 })
 
-// userSchema.virtual('name').get(function() {
-//     console.log(`Coming from the model ${this.first_name} ${this.last_name}`)
-//     return `${this.first_name} ${this.last_name}`;
-// });
-
 
 userSchema.pre('save', async function(next) {
     const salt = await bcrypt.genSalt()
-    this.hash = await bcrypt.hashSync(this.hash, salt)    
+    this.hash = bcrypt.hashSync(this.hash, salt)    
     next()
+})
+
+const generateAvatar = (x: string, y: string) => {
+    return `https://ui-avatars.com/api/?name=${x}+${y}&background=random&rounded=true&bold=false`
+}
+
+userSchema.post('save', async function(next) {
+    this.avatar = generateAvatar(this.first_name, this.last_name)
 })
 
 export default model<IUser>('User', userSchema)
