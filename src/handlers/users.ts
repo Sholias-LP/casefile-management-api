@@ -27,6 +27,7 @@ class User {
                 if (checkDatabaseForEmail !== null) {
                     return res.status(400).send({ message: 'User Already Exists' })
                 } else {
+                    
                     UserModel.create({
                         first_name: firstName,
                         last_name: lastName,
@@ -41,7 +42,6 @@ class User {
                                 fullname: `${user.first_name} ${user.last_name}`,
                                 email: user.email,
                                 role: user.role,
-                                avatar: user.avatar,
                                 token: jwt.sign(
                                     {
                                         first_name: firstName,

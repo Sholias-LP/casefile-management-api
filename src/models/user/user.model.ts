@@ -29,7 +29,8 @@ const userSchema = new Schema<IUser>({
         required: true
     },
     avatar: {
-        type: String
+        type: String,
+        default: ''
     },
     isDeleted: {
         type: Boolean,
@@ -57,8 +58,19 @@ const generateAvatar = (x: string, y: string) => {
     return `https://ui-avatars.com/api/?name=${x}+${y}&background=random&rounded=true&bold=false`
 }
 
-userSchema.post('save', async function(next) {
-    this.avatar = generateAvatar(this.first_name, this.last_name)
+userSchema.post('save', async function(doc, next) {
+
+    try {
+        await doc
+          .model('User')
+          .updateOne({ _id: doc._id }, { avatar: generateAvatar(doc.first_name, doc.last_name) });
+      } catch (error: any) {
+        console.log('get -> error', error);
+        next(error);
+      }
+    
+    next()
+
 })
 
 export default model<IUser>('User', userSchema)
