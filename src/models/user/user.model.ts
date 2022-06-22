@@ -62,10 +62,10 @@ userSchema.post('save', async function(doc, next) {
 
     try {
         await doc
-          .model("User")
+          .model('User')
           .updateOne({ _id: doc._id }, { avatar: generateAvatar(doc.first_name, doc.last_name) });
       } catch (error: any) {
-        console.log("get -> error", error);
+        console.log('get -> error', error);
         next(error);
       }
     
