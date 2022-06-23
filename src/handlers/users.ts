@@ -7,18 +7,6 @@ import { Types } from 'mongoose'
 
 const secret = process.env.SECRET as string
 
-interface IUserDocument {
-    save: any;
-    first_name: string;
-    last_name: string;
-    email: string;
-    role: string;
-    hash: string; 
-    avatar: string;
-    isDeleted: boolean;
-    createdAt: Date;
-    updatedAt: Date;
-}[]
 class User {
 
     static async Register(req: Request, res: Response) {
