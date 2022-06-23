@@ -39,9 +39,11 @@ class User {
                             success: true,
                             message: 'Sign Up Sucessful!',
                             data: {
-                                fullname: `${user.first_name} ${user.last_name}`,
+                                first_name: user.first_name,
+                                last_name: user.last_name,
                                 email: user.email,
                                 role: user.role,
+                                avatar: user.avatar,
                                 token: jwt.sign(
                                     {
                                         first_name: firstName,
@@ -88,6 +90,7 @@ class User {
                                 last_name: user.last_name,
                                 email: user.email,
                                 role: user.role,
+                                avatar: user.avatar,
                                 token: jwt.sign(
                                     {
                                         first_name: user.first_name,

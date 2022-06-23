@@ -64,11 +64,23 @@ userSchema.post('save', async function(doc, next) {
         await doc
           .model('User')
           .updateOne({ _id: doc._id }, { avatar: generateAvatar(doc.first_name, doc.last_name) });
+          this.avatar = generateAvatar(this.first_name, this.last_name)
       } catch (error: any) {
         console.log('get -> error', error);
         next(error);
       }
     
+    next()
+
+})
+
+
+userSchema.post('find', async function(doc, next) {
+
+    for (let index = 0; index < doc.length; index++) {
+        doc[index].hash = '👀'
+    }
+
     next()
 
 })
