@@ -7,6 +7,18 @@ import { Types } from 'mongoose'
 
 const secret = process.env.SECRET as string
 
+interface IUserDocument {
+    save: any;
+    first_name: string;
+    last_name: string;
+    email: string;
+    role: string;
+    hash: string; 
+    avatar: string;
+    isDeleted: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+}[]
 class User {
 
     static async Register(req: Request, res: Response) {
@@ -39,9 +51,11 @@ class User {
                             success: true,
                             message: 'Sign Up Sucessful!',
                             data: {
-                                fullname: `${user.first_name} ${user.last_name}`,
+                                first_name: user.first_name,
+                                last_name: user.last_name,
                                 email: user.email,
                                 role: user.role,
+                                avatar: user.avatar,
                                 token: jwt.sign(
                                     {
                                         first_name: firstName,
@@ -88,6 +102,7 @@ class User {
                                 last_name: user.last_name,
                                 email: user.email,
                                 role: user.role,
+                                avatar: user.avatar,
                                 token: jwt.sign(
                                     {
                                         first_name: user.first_name,
