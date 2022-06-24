@@ -2,7 +2,7 @@ import 'dotenv/config'
 import 'tsconfig-paths/register'
 import createError from 'http-errors'
 import express, { Request, Response } from 'express'
-import cors from 'cors'
+import { cors } from './middleware/utils'
 import path from 'path'
 import cookieParser from 'cookie-parser'
 import logger from 'morgan'
@@ -20,15 +20,9 @@ import documentationRouter from './routes/documentation.route'
 import { checkUser } from './middleware/validate-token'
 
 const app = express();
+
+app.use(cors)
 app.use(helmet());
-
-const options: cors.CorsOptions = {
-  origin: '*',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  optionsSuccessStatus: 204
-}
-
-app.use(cors(options))
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))

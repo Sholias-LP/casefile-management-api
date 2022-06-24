@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
-import { getToken } from '../utils/token'
+import { getToken } from './utils'
 
 const secret = process.env.SECRET as string
 export interface IToken {

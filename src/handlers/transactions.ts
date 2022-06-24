@@ -75,8 +75,6 @@ class Transactions extends BaseHandler {
             if (client) (filters as any).client = client
             if (author) (filters as any).author = (author as QueryOptions)
 
-            console.table(filters)
-
             TransactionsModel.find(filters).then((transactions) => {
                 return res.status(200).send({
                     success: true,
