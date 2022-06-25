@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { BaseHandler } from '../interfaces/handler'
 import TransactionsModel from '../models/transaction/transaction.model'
 import { QueryOptions, Types } from 'mongoose'
+import crypto from 'crypto'
 
 interface ITransactionDocument {
     save: any;
@@ -19,11 +20,6 @@ interface ITransactionDocument {
     updatedAt: Date;
 }
 
-function alphanumeric_unique() {
-    return Math.random().toString(36).split('').filter(function (value, index, self) {
-        return self.indexOf(value) === index;
-    }).join('').substr(2, 5);
-}
 class Transactions extends BaseHandler {
 
 
@@ -35,7 +31,7 @@ class Transactions extends BaseHandler {
 
             const newTransaction = new TransactionsModel({
                 author: res.locals.user._id,
-                transaction_id: `#${alphanumeric_unique()}`,
+                transaction_id: crypto.randomBytes(2).toString('hex').toUpperCase(),
                 transaction_type: transactionType,
                 client: client,
                 gender: gender,
@@ -68,9 +64,10 @@ class Transactions extends BaseHandler {
 
         try {
 
-            const { transactionType, client, author } = req.query
+            const { transactionID, transactionType, client, author } = req.query
             const filters = { isDeleted: false }
 
+            if (transactionID) (filters as any).transaction_id = transactionID
             if (transactionType) (filters as any).transaction_type = transactionType
             if (client) (filters as any).client = client
             if (author) (filters as any).author = (author as QueryOptions)

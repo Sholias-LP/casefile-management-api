@@ -65,4 +65,21 @@ const transactionSchema = new Schema<ITransaction>({
     }
 })
 
+
+
+transactionSchema.post('save', async function(doc, next) {
+    doc.transaction_id = `#${doc.transaction_id}`
+    next()
+})
+
+
+transactionSchema.post('find', async function(doc, next) {
+
+    doc.map((document: any) => {
+        document.transaction_id = `#${document.transaction_id}`
+    })
+    next()
+
+})
+
 export default model<ITransaction>('Transaction', transactionSchema)

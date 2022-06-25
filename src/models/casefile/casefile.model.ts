@@ -73,4 +73,21 @@ const casefileSchema = new Schema<ICasefile>({
     }
 })
 
+
+casefileSchema.post('save', async function(doc, next) {
+    doc.casefile_id = `#${doc.casefile_id}`
+    next()
+})
+
+
+casefileSchema.post('find', async function(doc, next) {
+
+    doc.map((document: any) => {
+        document.casefile_id = `#${document.casefile_id}`
+    })
+    next()
+
+})
+
+
 export default model<ICasefile>('Casefile', casefileSchema)

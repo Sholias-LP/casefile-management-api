@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { BaseHandler } from '../interfaces/handler'
 import CasefileModel from '../models/casefile/casefile.model'
 import { QueryOptions, Types } from 'mongoose'
+import crypto from 'crypto'
 
 interface ICasefileDocument {
     save: any;
@@ -22,11 +23,6 @@ interface ICasefileDocument {
     skip: any
 }
 
-function alphanumeric_unique() {
-    return Math.random().toString(36).split('').filter(function (value, index, self) {
-        return self.indexOf(value) === index;
-    }).join('').substr(2, 5);
-}
 
 class Casefiles extends BaseHandler {
 
@@ -38,7 +34,7 @@ class Casefiles extends BaseHandler {
         try {
             const newCasefile = new CasefileModel({
                 author: res.locals.user._id,
-                casefile_id: `#${alphanumeric_unique()}`,
+                casefile_id: crypto.randomBytes(2).toString('hex').toUpperCase(),
                 case_type: caseType,
                 client: client,
                 gender: gender,
@@ -71,9 +67,10 @@ class Casefiles extends BaseHandler {
     // Get all casefiles
     static async getAllCasefiles(req: Request, res: Response) {
 
-        const { caseType, client, author } = req.query
+        const { casefileID, caseType, client, author } = req.query
         const filters = { isDeleted: false }
 
+        if (casefileID) (filters as any).casefile_id = casefileID
         if (caseType) (filters as any).case_type = caseType
         if (client) (filters as any).client = client
         if (author) (filters as any).author = (author as QueryOptions)

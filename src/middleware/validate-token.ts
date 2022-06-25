@@ -19,7 +19,6 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
 
   // eslint-disable-next-line consistent-return
   jwt.verify(token, secret, (err, decodedToken) => {
-    console.log(decodedToken)
     if (err) {
       return res.status(401).send({
         message: 'Access is Denied'
