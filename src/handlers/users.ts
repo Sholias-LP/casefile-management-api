@@ -143,15 +143,18 @@ class User {
     // Reset User Password
     static async resetPassword(req: Request, res: Response) {
 
+        console.log("confirmCurrentUserVisibility", res.locals.user)
+        
+        const { newPassword, confirmNewPassword } = req.body
+        const checkPasword = newPassword === confirmNewPassword
+        
+        const email = res.locals.user.email
+        
+        const query = { email: email }
+        const update = { hash: bcrypt.hashSync(newPassword, 10) }
+
         try {
 
-            const { newPassword, confirmNewPassword } = req.body
-            const checkPasword = newPassword === confirmNewPassword
-
-            const email = res.locals.user.email
-
-            const query = { email: email }
-            const update = { hash: bcrypt.hashSync(newPassword, 10) }
             UserModel.findOneAndUpdate(query, { $set: update }, (error: any, document: any) => {
                 if (error) throw new Error(`Error: ${error.message}`);
 

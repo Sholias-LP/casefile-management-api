@@ -34,7 +34,7 @@ app.use('/api/v1/api-docs', documentationRouter)
 app.use('/', indexRouter)
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/users', usersRouter)
-app.use('/api/v1/', casefilesRouter)
+app.use('/api/v1/casefiles/', casefilesRouter)
 app.use('/api/v1/transactions/', transactionsRouter)
 app.use('/', invalidRouter)
 

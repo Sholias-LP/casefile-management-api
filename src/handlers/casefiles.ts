@@ -33,10 +33,11 @@ class Casefiles extends BaseHandler {
     // Add a new Casefile
     static async addACasefile(req: Request, res: Response) {
         
+        console.log("confirmCurrentUserVisibility", res.locals.user)
+
+        const { caseType, client, gender, occupation, brief, letterOfEngagement, serviceFee, deposit, expenses, courtSitting } = req.body
+        
         try {
-
-            const { caseType, client, gender, occupation, brief, letterOfEngagement, serviceFee, deposit, expenses, courtSitting } = req.body
-
             const newCasefile = new CasefileModel({
                 author: res.locals.user._id,
                 casefile_id: `#${alphanumeric_unique()}`,

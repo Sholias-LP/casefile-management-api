@@ -7,15 +7,15 @@ const router = express.Router()
 
 
 router
-    .route('/casefiles/new')
+    .route('/new')
     .post(validateToken, authorizeUser, checkUser, Casefile.addACasefile)
 
 router
-    .route('/casefiles/')
+    .route('/')
     .get(Casefile.getAllCasefiles)
 
 router
-    .route('/casefiles/:id')
+    .route('/:id')
     .get(Casefile.getACasefile)
     .put(validateToken, authorizeUser, Casefile.updateACasefile)
     .delete(validateToken, authorizeUser, Casefile.deleteACasefile)

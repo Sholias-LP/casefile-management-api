@@ -10,14 +10,15 @@ const secret = process.env.SECRET as string
 export interface IDecodedToken {
   id: ObjectId;
   email: string;
-  first_name: string
+  first_name: string;
+  currentUser: any
 }
 
 const validateToken = (req: Request, res: Response, next: NextFunction) => {
   const token = getToken(req)
 
   // eslint-disable-next-line consistent-return
-  jwt.verify(token, secret, (err) => {
+  jwt.verify(token, secret, (err, decodedToken) => {
     if (err) {
       return res.status(401).send({
         message: 'Access is Denied'
@@ -37,7 +38,7 @@ export const checkUser = (req: Request, res: Response, next: NextFunction) => {
       if (err) {
         res.locals.user = null
         return res.status(401).send({
-          message: 'Access is Denied'
+          message: 'Access Denied [--flag *fromcheckUser]'
         })
       } else {
         const user = await userModel.findById((decodedToken as IDecodedToken).id)

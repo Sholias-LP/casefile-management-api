@@ -29,6 +29,8 @@ class Transactions extends BaseHandler {
 
     static async addATransaction(req: Request, res: Response) {
 
+        console.log("confirmCurrentUserVisibility", res.locals.user)
+        
         const { transactionType, client, gender, occupation, brief, letterOfEngagement, serviceFee, deposit, expenses } = req.body
         
         try {
