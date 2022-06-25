@@ -142,8 +142,6 @@ class User {
 
     // Reset User Password
     static async resetPassword(req: Request, res: Response) {
-
-        console.log('confirmCurrentUserVisibility', res.locals.user)
         
         const { newPassword, confirmNewPassword } = req.body
         const checkPasword = newPassword === confirmNewPassword

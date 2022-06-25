@@ -32,8 +32,6 @@ class Casefiles extends BaseHandler {
 
     // Add a new Casefile
     static async addACasefile(req: Request, res: Response) {
-        
-        console.log('confirmCurrentUserVisibility', res.locals.user)
 
         const { caseType, client, gender, occupation, brief, letterOfEngagement, serviceFee, deposit, expenses, courtSitting } = req.body
         
