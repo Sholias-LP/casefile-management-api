@@ -8,7 +8,7 @@ const router = express.Router()
 
 router
     .route('/new')
-    .post(validateToken, authorizeUser, checkUser, Casefile.addACasefile)
+    .post(validateToken, authorizeUser, Casefile.addACasefile)
 
 router
     .route('/')
