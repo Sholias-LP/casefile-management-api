@@ -4,6 +4,8 @@ import jwt from 'jsonwebtoken'
 import isEmail from 'validator/lib/isEmail'
 import UserModel from '../models/user/user.model'
 import { Types } from 'mongoose'
+import CasefileModel from '../models/casefile/casefile.model'
+import TransactionModel from '../models/transaction/transaction.model'
 
 const secret = process.env.SECRET as string
 
@@ -27,7 +29,7 @@ class User {
                 if (checkDatabaseForEmail !== null) {
                     return res.status(400).send({ message: 'User Already Exists' })
                 } else {
-                    
+
                     UserModel.create({
                         first_name: firstName,
                         last_name: lastName,
@@ -140,14 +142,45 @@ class User {
     }
 
 
+    // Get All Users
+    static async getAllResourcesByAUser(req: Request, res: Response) {
+
+        try {
+
+            const id = req.params.id
+
+            if (Types.ObjectId.isValid(id)) {
+
+                const casefilesByUser = await CasefileModel.find({author: id})
+                const transactionsByUser = await  TransactionModel.find({author: id})
+
+                res.status(200).send({
+                    success: true,
+                    count: [...casefilesByUser, ...transactionsByUser].length,
+                    data: {
+                        casefiles: casefilesByUser,
+                        transactions: transactionsByUser
+                    }
+                })
+
+            } else {
+                return res.status(404).send({ success: false, message: 'Invalid Id' })
+            }
+        } catch (error) {
+            throw new Error((error as Error).message)
+        }
+    }
+
+
+
     // Reset User Password
     static async resetPassword(req: Request, res: Response) {
-        
+
         const { newPassword, confirmNewPassword } = req.body
         const checkPasword = newPassword === confirmNewPassword
-        
+
         const email = res.locals.user.email
-        
+
         const query = { email: email }
         const update = { hash: bcrypt.hashSync(newPassword, 10) }
 
