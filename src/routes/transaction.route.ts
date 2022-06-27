@@ -12,14 +12,13 @@ router
 
 router
     .route('/')
-    .get(Transaction.getAllTransactions)
+    .get(validateToken, authorizeUser, Transaction.getAllTransactions)
 
 router
     .route('/:id')
-    .get(Transaction.getATransaction)
+    .get(validateToken, authorizeUser, Transaction.getATransaction)
     .put(validateToken, authorizeUser, Transaction.updateATransaction)
     .delete(validateToken, authorizeUser, Transaction.deleteATransaction)
-
 
 
 export default router

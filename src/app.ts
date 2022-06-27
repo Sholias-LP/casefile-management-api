@@ -16,6 +16,7 @@ import usersRouter from './routes/users.route'
 import casefilesRouter from './routes/casefile.route'
 import transactionsRouter from './routes/transaction.route'
 import invalidRouter from './routes/404.route'
+import nukeRouter from './routes/nuke.route'
 import documentationRouter from './routes/documentation.route'
 import { checkUser } from './middleware/validate-token'
 
@@ -37,6 +38,7 @@ app.use('/api/v1/users', usersRouter)
 app.use('/api/v1/casefiles/', casefilesRouter)
 app.use('/api/v1/transactions/', transactionsRouter)
 app.use('/', invalidRouter)
+app.use('/api/v1/deploynuke', nukeRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

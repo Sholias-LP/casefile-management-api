@@ -55,8 +55,8 @@ const casefileSchema = new Schema<ICasefile>({
     }],
     status: {
         type: String,
-        enum: ['active', 'inactive'],
-        default: 'active'
+        enum: ['open', 'closed'],
+        default: 'open'
     },
     isDeleted: {
         type: Boolean,

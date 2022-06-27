@@ -132,7 +132,7 @@ class User {
                 return res.status(200).send({
                     success: true,
                     count: users.length,
-                    data: users
+                    data: users.reverse()
                 })
             })
         } catch (error) {
@@ -142,7 +142,7 @@ class User {
     }
 
 
-    // Get All Users
+    // Get All Resources by a User
     static async getAllResourcesByAUser(req: Request, res: Response) {
 
         try {
@@ -158,11 +158,45 @@ class User {
                     success: true,
                     count: [...casefilesByUser, ...transactionsByUser].length,
                     data: {
-                        casefiles: casefilesByUser,
-                        transactions: transactionsByUser
+                        casefiles: casefilesByUser.reverse(),
+                        transactions: transactionsByUser.reverse()
                     }
                 })
 
+            } else {
+                return res.status(404).send({ success: false, message: 'Invalid Id' })
+            }
+        } catch (error) {
+            throw new Error((error as Error).message)
+        }
+    }
+
+
+
+    // Get a specific user
+    static getAUser(req: Request, res: Response) {
+
+        try {
+
+            const id = req.params.id
+
+            if (Types.ObjectId.isValid(id)) {
+                UserModel.findOne({ _id: id })
+                    .then((user) => {
+                        console.log(typeof(user))
+                        if (!user) {
+                            return res.status(404).send({
+                                success: false,
+                                message: 'User not found'
+                            })
+                        } else {
+                            return res.status(200).send({
+                                success: true,
+                                message: 'User retrieved successfully',
+                                data: user
+                            })
+                        }
+                    })
             } else {
                 return res.status(404).send({ success: false, message: 'Invalid Id' })
             }

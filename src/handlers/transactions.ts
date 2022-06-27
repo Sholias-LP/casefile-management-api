@@ -77,7 +77,7 @@ class Transactions extends BaseHandler {
                     success: true,
                     message: 'Transactions retrieved successfully',
                     count: transactions.length,
-                    data: transactions
+                    data: transactions.reverse()
                 })
             })
 
@@ -95,7 +95,7 @@ class Transactions extends BaseHandler {
             const id = req.params.id
 
             if (Types.ObjectId.isValid(id)) {
-                TransactionsModel.find({ _id: id })
+                TransactionsModel.findOne({ _id: id })
                     .then((transaction) => {
                         if (!transaction) {
                             return res.status(404).send({
@@ -143,8 +143,6 @@ class Transactions extends BaseHandler {
                             document.service_fee = serviceFee || document.service_fee
                         document.deposit = deposit || document.deposit
                         document.expenses = expenses || document.expenses
-                        // if (deposit) document.deposit[0] = deposit
-                        // if (expenses) document.expenses[0] = expenses
 
 
                         document.save().then((transaction: ITransactionDocument) => {

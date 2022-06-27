@@ -82,7 +82,7 @@ class Casefiles extends BaseHandler {
                     success: true,
                     message: 'Casefiles retrieved successfully',
                     count: casefiles.length,
-                    data: casefiles
+                    data: casefiles.reverse()
                 })
             })
 
@@ -99,7 +99,7 @@ class Casefiles extends BaseHandler {
             const { id } = req.params
 
             if (Types.ObjectId.isValid(id)) {
-                CasefileModel.find({ _id: id })
+                CasefileModel.findOne({ _id: id })
                     .then((casefile) => {
                         if (!casefile) {
                             return res.status(404).send({
