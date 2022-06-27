@@ -11,7 +11,11 @@ router
 
 router
     .route('/')
-    .get(User.getAllUsers)
+    .get(validateToken, authorizeUser, User.getAllUsers)
+
+router
+    .route('/:id')
+    .get(validateToken, authorizeUser, User.getAUser)
 
 router
     .route('/:id/resources')

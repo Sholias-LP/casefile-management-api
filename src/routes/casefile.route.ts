@@ -12,11 +12,11 @@ router
 
 router
     .route('/')
-    .get(Casefile.getAllCasefiles)
+    .get(validateToken, authorizeUser, Casefile.getAllCasefiles)
 
 router
     .route('/:id')
-    .get(Casefile.getACasefile)
+    .get(validateToken, authorizeUser, Casefile.getACasefile)
     .put(validateToken, authorizeUser, Casefile.updateACasefile)
     .delete(validateToken, authorizeUser, Casefile.deleteACasefile)
 
