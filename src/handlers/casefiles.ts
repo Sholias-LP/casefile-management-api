@@ -17,6 +17,7 @@ interface ICasefileDocument {
     deposit: number[];
     expenses: any[];
     court_sitting: any[];
+    status: string;
     createdAt: Date;
     updatedAt: Date;
     limit: any;
@@ -155,6 +156,53 @@ class Casefiles extends BaseHandler {
                                 success: true,
                                 message: 'Casefile Updated Successfully',
                                 data: casefile
+                            })
+                        }).catch((error: Error) => {
+                            throw new Error(error.message);
+                        })
+                    } else {
+                        return res.status(404).send(
+                            {
+                                success: false,
+                                message: 'Casefile not found'
+                            })
+                    }
+                })
+            } else {
+                return res.status(404).send(
+                    {
+                        success: false,
+                        message: 'Invalid ID'
+                    })
+            }
+        } catch (error) {
+            throw new Error((error as Error).message);
+        }
+
+    }
+
+
+
+    // Close a casefile
+    static closeACasefile(req: Request, res: Response) {
+
+        const casefileId = req.params.id
+        
+        try {
+            
+            if (Types.ObjectId.isValid(casefileId)) {
+
+                CasefileModel.findById({ _id: casefileId }, (error: Error, document: ICasefileDocument) => {
+                    if (error) return res.send({ success: false, message: 'Failed to close casefile: ' + error })
+
+                    if (document) {
+
+                        document.status = 'closed'
+
+                        document.save().then((_casefile: ICasefileDocument) => {
+                            return res.status(200).send({
+                                success: true,
+                                message: 'Casefile Closed Successfully',
                             })
                         }).catch((error: Error) => {
                             throw new Error(error.message);

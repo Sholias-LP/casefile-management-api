@@ -20,4 +20,8 @@ router
     .put(validateToken, authorizeUser, Casefile.updateACasefile)
     .delete(validateToken, authorizeUser, Casefile.deleteACasefile)
 
+router
+    .route('/:id/cerca')
+    .post(validateToken, authorizeUser, Casefile.closeACasefile)
+
 export default router
