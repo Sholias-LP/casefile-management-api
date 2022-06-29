@@ -226,7 +226,7 @@ class Transactions extends BaseHandler {
                         document.save().then((_transaction: ITransactionDocument) => {
                             return res.status(200).send({
                                 success: true,
-                                message: 'Transacation Closed Successfully',
+                                message: 'Transacation Closed Successfully'
                             })
                         }).catch((error: Error) => {
                             throw new Error(error.message);
