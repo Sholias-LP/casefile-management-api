@@ -22,7 +22,8 @@ interface ICasefile {
         note: string
     }[];
     status: string;
-    isDeleted: boolean
+    isDeleted: boolean;
+    views: number;
     createdAt: Date;
     updatedAt: Date;
 }

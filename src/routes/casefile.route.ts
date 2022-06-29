@@ -24,4 +24,8 @@ router
     .route('/:id/cerca')
     .post(validateToken, authorizeUser, Casefile.closeACasefile)
 
+router
+    .route('/:id/views')
+    .get(validateToken, authorizeUser, Casefile.getNumberOfViews)
+
 export default router

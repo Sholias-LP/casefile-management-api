@@ -24,4 +24,8 @@ router
     .route('/:id/cerca')
     .post(validateToken, authorizeUser, Transaction.closeATtransaction)
 
+router
+    .route('/:id/views')
+    .get(validateToken, authorizeUser, Transaction.getNumberOfViews)
+
 export default router

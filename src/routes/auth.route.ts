@@ -19,4 +19,9 @@ router
     .put(validateToken, authorizeUser, User.resetPassword)
 
 
+    router
+    .route('/forgotpassword')
+    .put(User.forgotPassword)
+
+
 export default router
