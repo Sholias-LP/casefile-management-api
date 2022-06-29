@@ -16,6 +16,8 @@ interface ITransactionDocument {
     service_fee: number;
     deposit: number[];
     expenses: any[];
+    status: string;
+    views: number;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -24,9 +26,9 @@ class Transactions extends BaseHandler {
 
 
     static async addATransaction(req: Request, res: Response) {
-        
+
         const { transactionType, client, gender, occupation, brief, letterOfEngagement, serviceFee, deposit, expenses } = req.body
-        
+
         try {
 
             const newTransaction = new TransactionsModel({
@@ -88,34 +90,59 @@ class Transactions extends BaseHandler {
 
 
     // Get a specific transaction
-    static getATransaction(req: Request, res: Response) {
+    static async getATransaction(req: Request, res: Response) {
 
         try {
 
             const id = req.params.id
 
             if (Types.ObjectId.isValid(id)) {
-                TransactionsModel.findOne({ _id: id })
+
+                const transaction = await TransactionsModel.findById(id)
+                transaction?.views != null ? transaction.views++ : null
+                transaction?.save()
                     .then((transaction) => {
-                        if (!transaction) {
-                            return res.status(404).send({
-                                success: false,
-                                message: 'Transaction not found'
-                            })
-                        } else {
-                            return res.status(200).send({
-                                success: true,
-                                message: 'Transaction retrieved successfully',
-                                data: transaction
-                            })
-                        }
+                        return res.status(200).send({
+                            success: true,
+                            message: 'Transaction retrieved successfully',
+                            data: transaction
+                        })
+
                     })
+
+
             } else {
                 return res.status(404).send({ success: false, message: 'Invalid Id' })
             }
         } catch (error) {
             throw new Error((error as Error).message)
         }
+    }
+
+
+
+    static async getNumberOfViews(req: Request, res: Response) {
+
+        try {
+            const { id } = req.params
+
+            if (Types.ObjectId.isValid(id)) {
+
+                TransactionsModel.findById(id, (err: Error, document: ITransactionDocument) => {
+                    if (err) res.send(err)
+                    return res.status(200).send({
+                        success: true,
+                        data: document.views
+                    })
+                })
+
+            } else {
+                return res.status(404).send({ success: false, message: 'Invalid Id' })
+            }
+        } catch (error) {
+            throw new Error((error as Error).message);
+        }
+
     }
 
 
@@ -165,6 +192,53 @@ class Transactions extends BaseHandler {
 
                 })
 
+            } else {
+                return res.status(404).send(
+                    {
+                        success: false,
+                        message: 'Invalid ID'
+                    })
+            }
+        } catch (error) {
+            throw new Error((error as Error).message);
+        }
+
+    }
+
+
+
+    // Close a transaction
+    static closeATtransaction(req: Request, res: Response) {
+
+        const transactionId = req.params.id
+
+        try {
+
+            if (Types.ObjectId.isValid(transactionId)) {
+
+                TransactionsModel.findById({ _id: transactionId }, (error: Error, document: ITransactionDocument) => {
+                    if (error) return res.send({ success: false, message: 'Failed to close transaction: ' + error })
+
+                    if (document) {
+
+                        document.status = 'closed'
+
+                        document.save().then((_transaction: ITransactionDocument) => {
+                            return res.status(200).send({
+                                success: true,
+                                message: 'Transacation Closed Successfully'
+                            })
+                        }).catch((error: Error) => {
+                            throw new Error(error.message);
+                        })
+                    } else {
+                        return res.status(404).send(
+                            {
+                                success: false,
+                                message: 'Transacation not found'
+                            })
+                    }
+                })
             } else {
                 return res.status(404).send(
                     {

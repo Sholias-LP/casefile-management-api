@@ -3,6 +3,8 @@ import { BaseHandler } from '../interfaces/handler'
 import CasefileModel from '../models/casefile/casefile.model'
 import { QueryOptions, Types } from 'mongoose'
 import crypto from 'crypto'
+import UserModel from '../models/user/user.model'
+import IUser from '../models/user/user.interface'
 
 interface ICasefileDocument {
     save: any;
@@ -17,6 +19,8 @@ interface ICasefileDocument {
     deposit: number[];
     expenses: any[];
     court_sitting: any[];
+    status: string;
+    views: number;
     createdAt: Date;
     updatedAt: Date;
     limit: any;
@@ -30,7 +34,7 @@ class Casefiles extends BaseHandler {
     static async addACasefile(req: Request, res: Response) {
 
         const { caseType, client, gender, occupation, brief, letterOfEngagement, serviceFee, deposit, expenses, courtSitting } = req.body
-        
+
         try {
             const newCasefile = new CasefileModel({
                 author: res.locals.user._id,
@@ -48,6 +52,7 @@ class Casefiles extends BaseHandler {
             })
 
             await newCasefile.save().then((newCasefile) => {
+
                 return res
                     .status(201)
                     .send({
@@ -55,6 +60,7 @@ class Casefiles extends BaseHandler {
                         message: 'Casefile added successfully',
                         data: newCasefile
                     })
+
             }).catch((err) => { throw new Error((err as Error).message) })
         } catch (error) {
             throw new Error((error as Error).message);
@@ -93,27 +99,52 @@ class Casefiles extends BaseHandler {
 
 
     // Get a specific casefile
-    static getACasefile(req: Request, res: Response) {
+    static async getACasefile(req: Request, res: Response) {
 
         try {
             const { id } = req.params
 
             if (Types.ObjectId.isValid(id)) {
-                CasefileModel.findOne({ _id: id })
+
+                const casefile = await CasefileModel.findById(id)
+                casefile?.views != null ? casefile.views++ : null
+                casefile?.save()
                     .then((casefile) => {
-                        if (!casefile) {
-                            return res.status(404).send({
-                                success: false,
-                                message: 'Casefile not found'
-                            })
-                        } else {
-                            return res.status(200).send({
-                                success: true,
-                                message: 'Casefile retrieved successfully',
-                                data: casefile
-                            })
-                        }
+                        return res.status(200).send({
+                            success: true,
+                            message: 'Casefile retrieved successfully',
+                            data: casefile
+                        })
+
                     })
+
+            } else {
+                return res.status(404).send({ success: false, message: 'Invalid Id' })
+            }
+        } catch (error) {
+            throw new Error((error as Error).message);
+        }
+
+    }
+
+
+
+    // Get number of views on a casefile
+    static async getNumberOfViews(req: Request, res: Response) {
+
+        try {
+            const { id } = req.params
+
+            if (Types.ObjectId.isValid(id)) {
+
+                CasefileModel.findById(id, (err: Error, document: ICasefileDocument) => {
+                    if (err) res.send(err)
+                    return res.status(200).send({
+                        success: true,
+                        data: document.views
+                    })
+                })
+
             } else {
                 return res.status(404).send({ success: false, message: 'Invalid Id' })
             }
@@ -155,6 +186,53 @@ class Casefiles extends BaseHandler {
                                 success: true,
                                 message: 'Casefile Updated Successfully',
                                 data: casefile
+                            })
+                        }).catch((error: Error) => {
+                            throw new Error(error.message);
+                        })
+                    } else {
+                        return res.status(404).send(
+                            {
+                                success: false,
+                                message: 'Casefile not found'
+                            })
+                    }
+                })
+            } else {
+                return res.status(404).send(
+                    {
+                        success: false,
+                        message: 'Invalid ID'
+                    })
+            }
+        } catch (error) {
+            throw new Error((error as Error).message);
+        }
+
+    }
+
+
+
+    // Close a casefile
+    static closeACasefile(req: Request, res: Response) {
+
+        const casefileId = req.params.id
+
+        try {
+
+            if (Types.ObjectId.isValid(casefileId)) {
+
+                CasefileModel.findById({ _id: casefileId }, (error: Error, document: ICasefileDocument) => {
+                    if (error) return res.send({ success: false, message: 'Failed to close casefile: ' + error })
+
+                    if (document) {
+
+                        document.status = 'closed'
+
+                        document.save().then((_casefile: ICasefileDocument) => {
+                            return res.status(200).send({
+                                success: true,
+                                message: 'Casefile Closed Successfully'
                             })
                         }).catch((error: Error) => {
                             throw new Error(error.message);

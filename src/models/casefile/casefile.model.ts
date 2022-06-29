@@ -62,6 +62,10 @@ const casefileSchema = new Schema<ICasefile>({
         type: Boolean,
         default: false
     },
+    views: {
+        type: Number,
+        default: 1
+    },
     createdAt: {
         type: Date,
         immutable: true,

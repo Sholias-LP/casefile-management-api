@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model, Types } from 'mongoose'
 import bcrypt from 'bcrypt'
 import IUser from './user.interface'
 
@@ -35,6 +35,9 @@ const userSchema = new Schema<IUser>({
     isDeleted: {
         type: Boolean,
         default: false
+    },
+    notification: {
+        type: []
     },
     createdAt: {
         type: Date,

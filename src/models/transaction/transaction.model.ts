@@ -54,6 +54,10 @@ const transactionSchema = new Schema<ITransaction>({
         type: Boolean,
         default: false
     },
+    views: {
+        type: Number,
+        default: 1
+    },
     createdAt: {
         type: Date,
         immutable: true,

@@ -151,8 +151,8 @@ class User {
 
             if (Types.ObjectId.isValid(id)) {
 
-                const casefilesByUser = await CasefileModel.find({author: id})
-                const transactionsByUser = await  TransactionModel.find({author: id})
+                const casefilesByUser = await CasefileModel.find({ author: id })
+                const transactionsByUser = await TransactionModel.find({ author: id })
 
                 res.status(200).send({
                     success: true,
@@ -183,7 +183,7 @@ class User {
             if (Types.ObjectId.isValid(id)) {
                 UserModel.findOne({ _id: id })
                     .then((user) => {
-                        console.log(typeof(user))
+                        console.log(typeof (user))
                         if (!user) {
                             return res.status(404).send({
                                 success: false,
@@ -232,13 +232,21 @@ class User {
                     if (!checkPasword) {
                         res.status(400).send({ message: 'Passwords do not match' })
                     } else {
-                        return res.status(200).send({
-                            success: true,
-                            message: 'Password Changed'
-                        })
+
+                        if (!bcrypt.compareSync(newPassword, document.hash)) {
+                            return res.status(200).send({
+                                success: true,
+                                message: 'Password Changed'
+                            })
+                        } else {
+                            return res.status(200).send({
+                                success: true,
+                                message: 'No changes made'
+                            })
+                        }                       
+                        
                     }
                 }
-
             })
 
         } catch (error) {
@@ -247,6 +255,55 @@ class User {
 
     }
 
+
+
+    // Recover Password
+    static async forgotPassword(req: Request, res: Response) {
+
+        const { email, newPassword, confirmNewPassword } = req.body
+        const checkPasword = newPassword === confirmNewPassword
+
+        try {
+
+            if (!isEmail(email)) {
+                return res.status(400).send({
+                    success: false,
+                    message: 'Invalid Email'
+                })
+            } else {
+
+                const query = { email: email }
+                const update = { hash: bcrypt.hashSync(newPassword, 10) }
+
+                UserModel.findOneAndUpdate(query, { $set: update }, (error: any, document: any) => {
+                    if (error) throw new Error(`Error: ${error.message}`);
+
+                    if (!document) {
+                        return res.status(400).send({
+                            success: false,
+                            message: 'This user doesn\'t exist'
+                        })
+                    } else {
+
+                        if (!checkPasword) {
+                            res.status(400).send({ message: 'Passwords do not match' })
+                        } else {
+                            return res.status(200).send({
+                                success: true,
+                                message: 'Password Changed'
+                            })
+                        }
+                    }
+
+                })
+            }
+
+        } catch (error) {
+            throw new Error((error as Error).message)
+        }
+    }
+
+    
 
     // Delete a user
     static async deleteAUser(req: Request, res: Response) {

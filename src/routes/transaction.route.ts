@@ -20,5 +20,12 @@ router
     .put(validateToken, authorizeUser, Transaction.updateATransaction)
     .delete(validateToken, authorizeUser, Transaction.deleteATransaction)
 
+router
+    .route('/:id/cerca')
+    .post(validateToken, authorizeUser, Transaction.closeATtransaction)
+
+router
+    .route('/:id/views')
+    .get(validateToken, authorizeUser, Transaction.getNumberOfViews)
 
 export default router
