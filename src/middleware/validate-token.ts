@@ -38,7 +38,7 @@ export const checkUser = (req: Request, res: Response, next: NextFunction) => {
       if (err) {
         res.locals.user = null
         return res.status(401).send({
-          message: 'Access Denied [--flag *fromcheckUser]'
+          message: 'Access Denied'
         })
       } else {
         const user = await userModel.findById((decodedToken as IDecodedToken).id)
