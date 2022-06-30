@@ -18,7 +18,7 @@ const authorizeUser = async (req: Request, res: Response, next: NextFunction) =>
             }
         })
     } catch (err) {
-
+        console.log(err)
     }
 }
 
