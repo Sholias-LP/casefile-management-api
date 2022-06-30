@@ -19,7 +19,7 @@ router
     .put(validateToken, authorizeUser, User.resetPassword)
 
 
-    router
+router
     .route('/forgotpassword')
     .put(User.forgotPassword)
 
