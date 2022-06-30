@@ -2,7 +2,7 @@ import express, { Request, Response} from 'express';
 
 const router = express.Router()
 
-/* GET home page. */
+/* GET home page. */  
 const welcomeRoute = (req: Request, res: Response) => {
   res.status(200).send(
     { 
