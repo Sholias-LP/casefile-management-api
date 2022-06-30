@@ -8,7 +8,7 @@ import CasefileModel from '../models/casefile/casefile.model'
 import TransactionModel from '../models/transaction/transaction.model'
 
 const secret = process.env.SECRET as string
-
+ 
 class User {
 
     static async Register(req: Request, res: Response) {
