@@ -3,9 +3,12 @@ import { BaseHandler } from '../interfaces/handler'
 import TransactionsModel from '../models/transaction/transaction.model'
 import { QueryOptions, Types } from 'mongoose'
 import crypto from 'crypto'
+import UserModel from '../models/user/user.model'
+import IUser from '../models/user/user.interface'
 
 interface ITransactionDocument {
-    save: any;
+    _id: Types.ObjectId;
+    author: Types.ObjectId;
     transaction_id: string;
     transaction_type: string;
     client: string;
@@ -20,6 +23,7 @@ interface ITransactionDocument {
     views: number;
     createdAt: Date;
     updatedAt: Date;
+    save: any;
 }
 
 class Transactions extends BaseHandler {
@@ -45,7 +49,17 @@ class Transactions extends BaseHandler {
                 expenses: expenses
             })
 
-            await newTransaction.save().then((newTransaction) => {
+            await newTransaction.save().then(async (newTransaction) => {
+
+                const { _id, first_name } = res.locals.user
+
+                let notificationMessage = `${first_name} [${_id}] created a transaction; ${newTransaction._id} --- ${Date.now()}`
+                const users = await UserModel.find({})
+                users.map(async (user: IUser) => {
+                    !user._id.equals(res.locals.user._id) ? user.notification.push(notificationMessage) : null
+                    await user.save()
+                })
+
                 return res
                     .status(201)
                     .send({
@@ -172,7 +186,27 @@ class Transactions extends BaseHandler {
                         document.expenses = expenses || document.expenses
 
 
-                        document.save().then((transaction: ITransactionDocument) => {
+                        document.save().then(async (transaction: ITransactionDocument) => {
+
+
+                            const { _id, first_name } = res.locals.user
+
+                            let notificationMessage = `${first_name} [${_id}] made changes to a transaction; ${document._id} --- ${Date.now()}`
+                            let _authorNotifMsg = `${first_name} [${_id}] made changes to a transaction you created; ${document._id} --- ${Date.now()}`
+
+                            const users = await UserModel.find({})
+                            users.map(async (user: IUser) => {
+
+                                if (!user._id.equals(res.locals.user._id)) {
+                                    user._id.equals(transaction.author)
+                                        ? user.notification.push(_authorNotifMsg)
+                                        : user.notification.push(notificationMessage)
+                                }
+
+                                await user.save()
+                            })
+
+
                             return res.status(200).send({
                                 success: true,
                                 message: 'Transaction Updated Successfully',
@@ -223,7 +257,23 @@ class Transactions extends BaseHandler {
 
                         document.status = 'closed'
 
-                        document.save().then((_transaction: ITransactionDocument) => {
+                        document.save().then(async (_transaction: ITransactionDocument) => {
+
+                            const { _id, first_name } = res.locals.user
+
+                            let notificationMessage = `${first_name} [${_id}] closed a transaction; ${document._id} --- ${Date.now()}`
+                            let _authorNotifMsg = `${first_name} [${_id}] closed a transaction you created; ${document._id} --- ${Date.now()}`
+                            const users = await UserModel.find({})
+                            users.map(async (user: IUser) => {
+                                if (!user._id.equals(res.locals.user._id)) {
+                                    user._id.equals(document.author)
+                                        ? user.notification.push(_authorNotifMsg)
+                                        : user.notification.push(notificationMessage)
+                                }
+
+                                await user.save()
+                            })
+
                             return res.status(200).send({
                                 success: true,
                                 message: 'Transacation Closed Successfully'
@@ -268,6 +318,25 @@ class Transactions extends BaseHandler {
                         message: 'Transaction not found.'
                     })
                 } else {
+
+                    const { _id, first_name } = res.locals.user
+
+                    let notificationMessage = `${first_name} [${_id}] deleted a transaction; ${transaction._id} --- ${Date.now()}`
+                    let _authorNotifMsg = `${first_name} [${_id}] deleted a transaction you created; ${transaction._id} --- ${Date.now()}`
+                    const users = await UserModel.find({})
+
+                    users.map(async (user: IUser) => {
+
+                        if (!user._id.equals(res.locals.user._id)) {
+                            user._id.equals(transaction.author)
+                                ? user.notification.push(_authorNotifMsg)
+                                : user.notification.push(notificationMessage)
+                        }
+
+                        await user.save()
+                    })
+
+
                     return res.status(200).send({
                         success: true,
                         message: 'Transaction Successfully Deleted'

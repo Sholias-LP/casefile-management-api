@@ -10,7 +10,9 @@ interface ITransaction {
     occupation: string;
     transaction_summary: string;
     service_fee: number;
-    deposit: number[];
+    deposit: {
+        amount: number
+    }[];
     expenses: {
         amount: number, 
         note: string

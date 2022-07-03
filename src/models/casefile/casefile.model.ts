@@ -43,7 +43,9 @@ const casefileSchema = new Schema<ICasefile>({
         type: Number
     },
     deposit: {
-        type: [Number]
+        type: [{
+            amount: Number
+        }]
     },
     expenses: [{
         amount: Number,

@@ -69,7 +69,6 @@ userSchema.post('save', async function(doc, next) {
           .updateOne({ _id: doc._id }, { avatar: generateAvatar(doc.first_name, doc.last_name) });
           this.avatar = generateAvatar(this.first_name, this.last_name)
       } catch (error: any) {
-        console.log('get -> error', error);
         next(error);
       }
     
