@@ -37,10 +37,9 @@ const transactionSchema = new Schema<ITransaction>({
     service_fee: {
         type: Number
     },
-    deposit: {
-        type: [Number],
-        default: []
-    },
+    deposit: [{
+        amount: Number
+    }],
     expenses: [{
         amount: Number,
         note: String

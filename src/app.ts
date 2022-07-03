@@ -19,6 +19,7 @@ import invalidRouter from './routes/404.route'
 import nukeRouter from './routes/nuke.route'
 import ResourceCategoryRouter from './routes/resource.route'
 import documentationRouter from './routes/documentation.route'
+import notificationRouter from './routes/notifications.route'
 import { checkUser } from './middleware/validate-token'
 
 const app = express();
@@ -39,6 +40,7 @@ app.use('/api/v1/users', usersRouter)
 app.use('/api/v1/casefiles/', casefilesRouter)
 app.use('/api/v1/transactions/', transactionsRouter)
 app.use('/api/v1/resourcecategory/', ResourceCategoryRouter)
+app.use('/api/v1/notifications/', notificationRouter)
 app.use('/', invalidRouter)
 app.use('/api/v1/deploynuke', nukeRouter)
 

@@ -7,7 +7,8 @@ import UserModel from '../models/user/user.model'
 import IUser from '../models/user/user.interface'
 
 interface ICasefileDocument {
-    save: any;
+    _id: Types.ObjectId;
+    author: Types.ObjectId;
     casefile_id: string;
     casefile_type: string;
     client: string;
@@ -23,6 +24,7 @@ interface ICasefileDocument {
     views: number;
     createdAt: Date;
     updatedAt: Date;
+    save: any;
     limit: any;
     skip: any
 }
@@ -51,7 +53,16 @@ class Casefiles extends BaseHandler {
                 court_sitting: courtSitting
             })
 
-            await newCasefile.save().then((newCasefile) => {
+            await newCasefile.save().then(async (newCasefile) => {
+
+                const { _id, first_name } = res.locals.user
+
+                const notificationMessage = `${first_name} [${_id}] created a casefile; ${newCasefile._id} --- ${Date.now()}`
+                const users = await UserModel.find({})
+                users.map(async (user: IUser) => {
+                    !user._id.equals(res.locals.user._id) ? user.notification.push(notificationMessage) : null
+                    await user.save()
+                })
 
                 return res
                     .status(201)
@@ -157,7 +168,7 @@ class Casefiles extends BaseHandler {
 
 
     // Update a casefile
-    static updateACasefile(req: Request, res: Response) {
+    static async updateACasefile(req: Request, res: Response) {
 
         try {
             const casefileId = req.params.id
@@ -181,7 +192,25 @@ class Casefiles extends BaseHandler {
                         document.expenses = expenses || document.expenses
                         document.court_sitting = courtSitting || document.court_sitting
 
-                        document.save().then((casefile: ICasefileDocument) => {
+                        document.save().then(async (casefile: ICasefileDocument) => {
+
+                            const { _id, first_name } = res.locals.user
+
+                            const notificationMessage = `${first_name} [${_id}] made changes to a casefile; ${document._id} --- ${Date.now()}`
+                            const _authorNotifMsg = `${first_name} [${_id}] made changes to a casefile you created; ${document._id} --- ${Date.now()}`
+
+                            const users = await UserModel.find({})
+                            users.map(async (user: IUser) => {
+
+                                if (!user._id.equals(res.locals.user._id)) {
+                                    user._id.equals(casefile.author)
+                                        ? user.notification.push(_authorNotifMsg)
+                                        : user.notification.push(notificationMessage)
+                                }
+
+                                await user.save()
+                            })
+
                             return res.status(200).send({
                                 success: true,
                                 message: 'Casefile Updated Successfully',
@@ -225,11 +254,27 @@ class Casefiles extends BaseHandler {
                 CasefileModel.findById({ _id: casefileId }, (error: Error, document: ICasefileDocument) => {
                     if (error) return res.send({ success: false, message: 'Failed to close casefile: ' + error })
 
-                    if (document) {
+                    if (document && document.status == 'open') {
 
                         document.status = 'closed'
 
-                        document.save().then((_casefile: ICasefileDocument) => {
+                        document.save().then(async (_casefile: ICasefileDocument) => {
+
+                            const { _id, first_name } = res.locals.user
+
+                            const notificationMessage = `${first_name} [${_id}] closed a casefile; ${document._id} --- ${Date.now()}`
+                            const _authorNotifMsg = `${first_name} [${_id}] closed a casefile you created; ${document._id} --- ${Date.now()}`
+                            const users = await UserModel.find({})
+                            users.map(async (user: IUser) => {
+                                if (!user._id.equals(res.locals.user._id)) {
+                                    user._id.equals(document.author)
+                                        ? user.notification.push(_authorNotifMsg)
+                                        : user.notification.push(notificationMessage)
+                                }
+        
+                                await user.save()
+                            })
+
                             return res.status(200).send({
                                 success: true,
                                 message: 'Casefile Closed Successfully'
@@ -272,9 +317,27 @@ class Casefiles extends BaseHandler {
                 if (!casefile) {
                     return res.status(404).send({
                         success: false,
-                        message: 'Casefile not found.'
+                        message: 'Casefile not found'
                     })
                 } else {
+
+                    const { _id, first_name } = res.locals.user
+
+                    const notificationMessage = `${first_name} [${_id}] deleted a casefile; ${casefile._id} --- ${Date.now()}`
+                    const _authorNotifMsg = `${first_name} [${_id}] deleted a casefile you created; ${casefile._id} --- ${Date.now()}`
+                    const users = await UserModel.find({})
+
+                    users.map(async (user: IUser) => {
+
+                        if (!user._id.equals(res.locals.user._id)) {
+                            user._id.equals(casefile.author)
+                                ? user.notification.push(_authorNotifMsg)
+                                : user.notification.push(notificationMessage)
+                        }
+
+                        await user.save()
+                    })
+
                     return res.status(200).send({
                         success: true,
                         message: 'Casefile Successfully Deleted'
