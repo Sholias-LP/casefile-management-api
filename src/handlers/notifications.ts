@@ -15,7 +15,7 @@ class Notification extends BaseHandler {
                     res.send(err)
                 } else {
                     const notifications = user.notification
-                    let blank: [] = []
+                    const blank: [] = []
                     user.notification = blank
                     user.save()
                     return res.status(200).send({

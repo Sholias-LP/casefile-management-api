@@ -57,7 +57,7 @@ class Casefiles extends BaseHandler {
 
                 const { _id, first_name } = res.locals.user
 
-                let notificationMessage = `${first_name} [${_id}] created a casefile; ${newCasefile._id} --- ${Date.now()}`
+                const notificationMessage = `${first_name} [${_id}] created a casefile; ${newCasefile._id} --- ${Date.now()}`
                 const users = await UserModel.find({})
                 users.map(async (user: IUser) => {
                     !user._id.equals(res.locals.user._id) ? user.notification.push(notificationMessage) : null
@@ -196,8 +196,8 @@ class Casefiles extends BaseHandler {
 
                             const { _id, first_name } = res.locals.user
 
-                            let notificationMessage = `${first_name} [${_id}] made changes to a casefile; ${document._id} --- ${Date.now()}`
-                            let _authorNotifMsg = `${first_name} [${_id}] made changes to a casefile you created; ${document._id} --- ${Date.now()}`
+                            const notificationMessage = `${first_name} [${_id}] made changes to a casefile; ${document._id} --- ${Date.now()}`
+                            const _authorNotifMsg = `${first_name} [${_id}] made changes to a casefile you created; ${document._id} --- ${Date.now()}`
 
                             const users = await UserModel.find({})
                             users.map(async (user: IUser) => {
@@ -262,8 +262,8 @@ class Casefiles extends BaseHandler {
 
                             const { _id, first_name } = res.locals.user
 
-                            let notificationMessage = `${first_name} [${_id}] closed a casefile; ${document._id} --- ${Date.now()}`
-                            let _authorNotifMsg = `${first_name} [${_id}] closed a casefile you created; ${document._id} --- ${Date.now()}`
+                            const notificationMessage = `${first_name} [${_id}] closed a casefile; ${document._id} --- ${Date.now()}`
+                            const _authorNotifMsg = `${first_name} [${_id}] closed a casefile you created; ${document._id} --- ${Date.now()}`
                             const users = await UserModel.find({})
                             users.map(async (user: IUser) => {
                                 if (!user._id.equals(res.locals.user._id)) {
@@ -323,8 +323,8 @@ class Casefiles extends BaseHandler {
 
                     const { _id, first_name } = res.locals.user
 
-                    let notificationMessage = `${first_name} [${_id}] deleted a casefile; ${casefile._id} --- ${Date.now()}`
-                    let _authorNotifMsg = `${first_name} [${_id}] deleted a casefile you created; ${casefile._id} --- ${Date.now()}`
+                    const notificationMessage = `${first_name} [${_id}] deleted a casefile; ${casefile._id} --- ${Date.now()}`
+                    const _authorNotifMsg = `${first_name} [${_id}] deleted a casefile you created; ${casefile._id} --- ${Date.now()}`
                     const users = await UserModel.find({})
 
                     users.map(async (user: IUser) => {
