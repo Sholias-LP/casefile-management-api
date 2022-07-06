@@ -13,7 +13,7 @@ class nukeApplication extends BaseHandler {
             UserModel.deleteMany({}, (error) => {
                 TransactionModel.deleteMany({}, (error) => {
                     casefileModel.deleteMany({}, (error) => {
-                        error ? res.send(error) : res.sendStatus(201)
+                        error ? res.send(error) : res.sendStatus(204)
                     })
                 })
             })

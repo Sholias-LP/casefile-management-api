@@ -8,7 +8,7 @@ import CasefileModel from '../models/casefile/casefile.model'
 import TransactionModel from '../models/transaction/transaction.model'
 
 const secret = process.env.SECRET as string
- 
+
 class User {
 
     static async Register(req: Request, res: Response) {
@@ -22,44 +22,26 @@ class User {
                 const { firstName, lastName, email, role, password, confirmPassword } = req.body
                 const checkPasword = password === confirmPassword
 
-                if (!checkPasword) return res.status(400).send({ message: 'Passwords do not match' })
+                !checkPasword
+                    ? res.status(400).send({ message: 'Passwords do not match' })
+                    : null
 
                 const checkDatabaseForEmail = await UserModel.exists({ email: req.body.email })
 
-                if (checkDatabaseForEmail !== null) {
-                    return res.status(400).send({ message: 'User Already Exists' })
-                } else {
-
-                    UserModel.create({
+                checkDatabaseForEmail !== null
+                    ? res.status(400).send({ message: 'User Already Exists' })
+                    : (UserModel.create({
                         first_name: firstName,
                         last_name: lastName,
                         email: email,
                         role: role,
-                        hash: password
-                    }).then((user) => {
+                        hash: bcrypt.hashSync(password, 10)
+                    }).then((_user) => {
                         return res.status(200).send({
                             success: true,
-                            message: 'Sign Up Sucessful!',
-                            data: {
-                                first_name: user.first_name,
-                                last_name: user.last_name,
-                                email: user.email,
-                                role: user.role,
-                                avatar: user.avatar,
-                                token: jwt.sign(
-                                    {
-                                        first_name: firstName,
-                                        last_name: lastName,
-                                        email: email,
-                                        id: user._id,
-                                        role: user.role
-                                    },
-                                    secret
-                                )
-                            }
+                            message: 'Sign Up Sucessful!'
                         })
-                    })
-                }
+                    }))
 
             }
 
@@ -75,37 +57,37 @@ class User {
         try {
 
             const { email, password } = req.body
+
             if (!isEmail(email)) {
                 return res.status(400).send({ message: 'Invalid Email' })
             } else {
+
                 const user = await UserModel.findOne({ email: email })
 
                 if (user) {
-                    if (!bcrypt.compareSync(password, user.hash)) {
-                        return res.status(400).send({ message: 'Invalid Password' })
-                    } else {
-                        return res.status(200).send({
+                    const payload = {
+                        first_name: user.first_name,
+                        last_name: user.last_name,
+                        email: user.email,
+                        role: user.role,
+                        avatar: user.avatar
+                    }
+
+                    !bcrypt.compareSync(password, user.hash)
+                        ? res.status(400).send({ message: 'Invalid Password' })
+                        : res.status(200).send({
                             success: true,
                             message: 'Sign in Successful',
                             data: {
-                                first_name: user.first_name,
-                                last_name: user.last_name,
-                                email: user.email,
-                                role: user.role,
-                                avatar: user.avatar,
+                                ...payload,
                                 token: jwt.sign(
-                                    {
-                                        first_name: user.first_name,
-                                        last_name: user.last_name,
-                                        email: user.email,
-                                        id: user.id,
-                                        role: user.role
-                                    },
-                                    secret
+                                    { id: user._id, ...payload },
+                                    secret,
+                                    { expiresIn: '1h' }
                                 )
                             }
                         })
-                    }
+
                 } else {
                     return res.status(400).send({ message: 'Email or password incorrect' })
                 }
@@ -183,18 +165,10 @@ class User {
             if (Types.ObjectId.isValid(id)) {
                 UserModel.findOne({ _id: id })
                     .then((user) => {
-                        if (!user) {
-                            return res.status(404).send({
-                                success: false,
-                                message: 'User not found'
-                            })
-                        } else {
-                            return res.status(200).send({
-                                success: true,
-                                message: 'User retrieved successfully',
-                                data: user
-                            })
-                        }
+                        !user
+                            ? res.status(404).send({ success: false, message: 'User not found'})
+                            : res.status(200).send({ success: true, message: 'User retrieved successfully', data: user })
+
                     })
             } else {
                 return res.status(404).send({ success: false, message: 'Invalid Id' })
@@ -242,8 +216,8 @@ class User {
                                 success: true,
                                 message: 'No changes made'
                             })
-                        }                       
-                        
+                        }
+
                     }
                 }
             })
@@ -302,7 +276,7 @@ class User {
         }
     }
 
-    
+
 
     // Delete a user
     static async deleteAUser(req: Request, res: Response) {
