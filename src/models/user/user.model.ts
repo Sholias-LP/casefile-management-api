@@ -51,11 +51,6 @@ const userSchema = new Schema<IUser>({
 })
 
 
-userSchema.pre('save', async function(next) {
-    const salt = await bcrypt.genSalt()
-    this.hash = bcrypt.hashSync(this.hash, salt)    
-    next()
-})
 
 const generateAvatar = (x: string, y: string) => {
     return `https://ui-avatars.com/api/?name=${x}+${y}&background=random&rounded=true&bold=false`
@@ -76,15 +71,5 @@ userSchema.post('save', async function(doc, next) {
 
 })
 
-
-userSchema.post('find', async function(doc, next) {
-
-    for (let index = 0; index < doc.length; index++) {
-        doc[index].hash = '👀'
-    }
-
-    next()
-
-})
 
 export default model<IUser>('User', userSchema)
