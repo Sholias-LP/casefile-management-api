@@ -7,15 +7,13 @@ const router = express.Router()
 
 router
     .route('/:id')
+    .get(validateToken, authorizeUser, User.getAUser)
+    .put(validateToken, authorizeUser, User.updateAUser)
     .delete(validateToken, authorizeUser, User.deleteAUser)
 
 router
     .route('/')
     .get(validateToken, authorizeUser, User.getAllUsers)
-
-router
-    .route('/:id')
-    .get(validateToken, authorizeUser, User.getAUser)
 
 router
     .route('/:id/resources')

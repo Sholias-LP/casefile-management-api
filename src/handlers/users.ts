@@ -6,6 +6,7 @@ import UserModel from '../models/user/user.model'
 import { Types } from 'mongoose'
 import CasefileModel from '../models/casefile/casefile.model'
 import TransactionModel from '../models/transaction/transaction.model'
+import IUser from '../models/user/user.interface'
 
 const secret = process.env.SECRET as string
 
@@ -166,7 +167,7 @@ class User {
                 UserModel.findOne({ _id: id })
                     .then((user) => {
                         !user
-                            ? res.status(404).send({ success: false, message: 'User not found'})
+                            ? res.status(404).send({ success: false, message: 'User not found' })
                             : res.status(200).send({ success: true, message: 'User retrieved successfully', data: user })
 
                     })
@@ -176,6 +177,55 @@ class User {
         } catch (error) {
             throw new Error((error as Error).message)
         }
+    }
+
+
+
+    // Update a user
+    static async updateAUser(req: Request, res: Response) {
+
+        try {
+            const userId = req.params.id
+            const { firstName, lastName } = req.body
+
+            if (Types.ObjectId.isValid(userId)) {
+
+                UserModel.findById({ _id: userId }, (error: Error, document: IUser) => {
+                    if (error) return res.send({ success: false, message: 'Update failed: ' + error })
+
+                    if (document) {
+                        document.first_name = firstName || document.first_name
+                        document.last_name = lastName || document.last_name
+
+                        document.save().then(async (user: IUser) => {
+
+                            return res.status(200).send({
+                                success: true,
+                                message: 'User Updated Successfully',
+                                data: user
+                            })
+                        }).catch((error: Error) => {
+                            throw new Error(error.message);
+                        })
+                    } else {
+                        return res.status(404).send(
+                            {
+                                success: false,
+                                message: 'User not found'
+                            })
+                    }
+                })
+            } else {
+                return res.status(404).send(
+                    {
+                        success: false,
+                        message: 'Invalid ID'
+                    })
+            }
+        } catch (error) {
+            throw new Error((error as Error).message);
+        }
+
     }
 
 
