@@ -21,31 +21,36 @@ class User {
             } else {
 
                 const { firstName, lastName, email, role, password, confirmPassword } = req.body
-                const checkPasword = password === confirmPassword
 
-                !checkPasword
-                    ? res.status(400).send({ message: 'Passwords do not match' })
-                    : null
+                if (password.length < 7) {
+                    return res.status(400).send({ message: 'Password must be above 6 characters' })
+                } else {
 
-                const checkDatabaseForEmail = await UserModel.exists({ email: req.body.email })
+                    const checkPasword = password === confirmPassword
 
-                checkDatabaseForEmail !== null
-                    ? res.status(400).send({ message: 'User Already Exists' })
-                    : (UserModel.create({
-                        first_name: firstName,
-                        last_name: lastName,
-                        email: email,
-                        role: role,
-                        hash: bcrypt.hashSync(password, 10)
-                    }).then((_user) => {
-                        return res.status(200).send({
-                            success: true,
-                            message: 'Sign Up Sucessful!'
-                        })
-                    }))
+                    if (!checkPasword) {
+                        return res.status(400).send({ message: 'Passwords do not match' })
+                    } else {
 
+                        const checkDatabaseForEmail = await UserModel.exists({ email: req.body.email })
+
+                        checkDatabaseForEmail !== null
+                            ? res.status(400).send({ message: 'User Already Exists' })
+                            : (UserModel.create({
+                                first_name: firstName,
+                                last_name: lastName,
+                                email: email,
+                                role: role,
+                                hash: bcrypt.hashSync(password, 10)
+                            }).then((_user) => {
+                                return res.status(200).send({
+                                    success: true,
+                                    message: 'Sign Up Sucessful!'
+                                })
+                            }))
+                    }
+                }
             }
-
         } catch (error) {
             throw new Error((error as Error).message);
         }
@@ -84,7 +89,7 @@ class User {
                                 token: jwt.sign(
                                     { id: user._id, ...payload },
                                     secret,
-                                    { expiresIn: '1h' }
+                                    { expiresIn: '24h' }
                                 )
                             }
                         })
@@ -97,7 +102,6 @@ class User {
         } catch (error) {
             throw new Error((error as Error).message);
         }
-
     }
 
 

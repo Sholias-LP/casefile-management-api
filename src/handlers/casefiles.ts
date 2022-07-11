@@ -271,7 +271,7 @@ class Casefiles extends BaseHandler {
                                         ? user.notification.push(_authorNotifMsg)
                                         : user.notification.push(notificationMessage)
                                 }
-        
+
                                 await user.save()
                             })
 
