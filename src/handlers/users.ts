@@ -72,6 +72,7 @@ class User {
 
                 if (user) {
                     const payload = {
+                        id: user._id,
                         first_name: user.first_name,
                         last_name: user.last_name,
                         email: user.email,
@@ -87,7 +88,7 @@ class User {
                             data: {
                                 ...payload,
                                 token: jwt.sign(
-                                    { id: user._id, ...payload },
+                                    { ...payload },
                                     secret,
                                     { expiresIn: '24h' }
                                 )
