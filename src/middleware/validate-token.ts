@@ -8,7 +8,7 @@ import userModel from '../models/user/user.model'
 const secret = process.env.SECRET as string
 
 export interface IDecodedToken {
-  id: ObjectId;
+  _id: ObjectId;
   email: string;
   first_name: string;
   currentUser: any
@@ -41,7 +41,7 @@ export const checkUser = (req: Request, res: Response, next: NextFunction) => {
           message: 'Access Denied'
         })
       } else {
-        const user = await userModel.findById((decodedToken as IDecodedToken).id)
+        const user = await userModel.findById((decodedToken as IDecodedToken)._id)
         res.locals.user = user
         next()
       }
