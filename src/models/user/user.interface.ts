@@ -10,7 +10,12 @@ interface IUser {
     hash: string;  
     avatar: string;
     isDeleted: boolean;
-    notification: string[];
+    notification: {
+        userId: Types.ObjectId,
+        activity: String,
+        resourceId: Types.ObjectId,
+        date?: Number
+    }[];
     createdAt: Date;
     updatedAt: Date;
     map: any;

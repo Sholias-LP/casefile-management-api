@@ -53,7 +53,14 @@ class Transactions extends BaseHandler {
 
                 const { _id, first_name } = res.locals.user
 
-                const notificationMessage = `${first_name} [${_id}] created a transaction; ${newTransaction._id} --- ${Date.now()}`
+                const notificationMessage = {
+                    userId: _id,
+                    activity: 'created a transaction',
+                    resourceId: newTransaction._id,
+                    date: Date.now()
+                }
+
+
                 const users = await UserModel.find({})
                 users.map(async (user: IUser) => {
                     !user._id.equals(res.locals.user._id) ? user.notification.push(notificationMessage) : null
@@ -191,15 +198,27 @@ class Transactions extends BaseHandler {
 
                             const { _id, first_name } = res.locals.user
 
-                            const notificationMessage = `${first_name} [${_id}] made changes to a transaction; ${document._id} --- ${Date.now()}`
-                            const _authorNotifMsg = `${first_name} [${_id}] made changes to a transaction you created; ${document._id} --- ${Date.now()}`
+                            const notificationMessage = {
+                                userId: _id,
+                                activity: 'made changes to a transaction',
+                                resourceId: document._id,
+                                date: Date.now()
+                            }
+        
+                            const _authorNotificationMessage = {
+                                userId: _id,
+                                activity: 'made changes to a transaction you created',
+                                resourceId: document._id,
+                                date: Date.now()
+                            }
+
 
                             const users = await UserModel.find({})
                             users.map(async (user: IUser) => {
 
                                 if (!user._id.equals(res.locals.user._id)) {
                                     user._id.equals(transaction.author)
-                                        ? user.notification.push(_authorNotifMsg)
+                                        ? user.notification.push(_authorNotificationMessage)
                                         : user.notification.push(notificationMessage)
                                 }
 
@@ -261,13 +280,26 @@ class Transactions extends BaseHandler {
 
                             const { _id, first_name } = res.locals.user
 
-                            const notificationMessage = `${first_name} [${_id}] closed a transaction; ${document._id} --- ${Date.now()}`
-                            const _authorNotifMsg = `${first_name} [${_id}] closed a transaction you created; ${document._id} --- ${Date.now()}`
+                            const notificationMessage = {
+                                userId: _id,
+                                activity: 'closed a transaction',
+                                resourceId: document._id,
+                                date: Date.now()
+                            }
+        
+                            const _authorNotificationMessage = {
+                                userId: _id,
+                                activity: 'closed a transaction you created',
+                                resourceId: document._id,
+                                date: Date.now()
+                            }
+
+
                             const users = await UserModel.find({})
                             users.map(async (user: IUser) => {
                                 if (!user._id.equals(res.locals.user._id)) {
                                     user._id.equals(document.author)
-                                        ? user.notification.push(_authorNotifMsg)
+                                        ? user.notification.push(_authorNotificationMessage)
                                         : user.notification.push(notificationMessage)
                                 }
 
@@ -321,15 +353,30 @@ class Transactions extends BaseHandler {
 
                     const { _id, first_name } = res.locals.user
 
-                    const notificationMessage = `${first_name} [${_id}] deleted a transaction; ${transaction._id} --- ${Date.now()}`
-                    const _authorNotifMsg = `${first_name} [${_id}] deleted a transaction you created; ${transaction._id} --- ${Date.now()}`
+
+                    const notificationMessage = {
+                        userId: _id,
+                        activity: 'deleted a transaction',
+                        resourceId: transaction._id,
+                        date: Date.now()
+                    }
+
+                    const _authorNotificationMessage = {
+                        userId: _id,
+                        activity: 'deleted a transaction you created',
+                        resourceId: transaction._id,
+                        date: Date.now()
+                    }
+
+
+
                     const users = await UserModel.find({})
 
                     users.map(async (user: IUser) => {
 
                         if (!user._id.equals(res.locals.user._id)) {
                             user._id.equals(transaction.author)
-                                ? user.notification.push(_authorNotifMsg)
+                                ? user.notification.push(_authorNotificationMessage)
                                 : user.notification.push(notificationMessage)
                         }
 
