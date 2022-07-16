@@ -16,7 +16,7 @@ class Notification extends BaseHandler {
                 } else {
                     return res.status(200).send({
                         success: true,
-                        data: user.notification
+                        data: user.notification.reverse()
                     })
                 }
             })
