@@ -1,5 +1,4 @@
 import { Schema, model, Types } from 'mongoose'
-import bcrypt from 'bcrypt'
 import IUser from './user.interface'
 
 const userSchema = new Schema<IUser>({
@@ -36,9 +35,12 @@ const userSchema = new Schema<IUser>({
         type: Boolean,
         default: false
     },
-    notification: {
-        type: []
-    },
+    notification: [{
+        userId: Schema.Types.ObjectId,
+        activity: String,
+        resourceId: Schema.Types.ObjectId,
+        date: Date
+    }],
     createdAt: {
         type: Date,
         immutable: true,
