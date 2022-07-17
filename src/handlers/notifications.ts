@@ -30,9 +30,9 @@ class Notification extends BaseHandler {
     }
 
 
-    static markAsRead(req: Request, res: Response) {}
+    // static markAsRead(req: Request, res: Response) {}
 
-    static markAsUnread(req: Request, res: Response) {}
+    // static markAsUnread(req: Request, res: Response) {}
 
 }
 
