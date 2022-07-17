@@ -12,9 +12,9 @@ interface IUser {
     isDeleted: boolean;
     notification: {
         userId: Types.ObjectId,
-        activity: String,
+        activity: string,
         resourceId: Types.ObjectId,
-        date?: Number
+        date?: number
     }[];
     createdAt: Date;
     updatedAt: Date;
