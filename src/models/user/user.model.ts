@@ -39,7 +39,8 @@ const userSchema = new Schema<IUser>({
         userId: Schema.Types.ObjectId,
         activity: String,
         resourceId: Schema.Types.ObjectId,
-        date: Date
+        date: Number,
+        status: {type: String, enum: ['read', 'unread'], default: 'unread'}
     }],
     createdAt: {
         type: Date,

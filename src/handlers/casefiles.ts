@@ -61,7 +61,8 @@ class Casefiles extends BaseHandler {
                     userId: _id,
                     activity: 'created a casefile',
                     resourceId: newCasefile._id,
-                    date: Date.now()
+                    date: Date.now(),
+                    status: 'unread'
                 }
 
                 const users = await UserModel.find({})
@@ -202,19 +203,21 @@ class Casefiles extends BaseHandler {
 
                             const { _id, first_name } = res.locals.user
 
-                            
+
                             const notificationMessage = {
                                 userId: _id,
                                 activity: 'made changes to a casefile',
                                 resourceId: document._id,
-                                date: Date.now()
+                                date: Date.now(),
+                                status: 'unread'
                             }
 
                             const _authorNotificationMessage = {
                                 userId: _id,
                                 activity: 'made changes to a casefile you created',
                                 resourceId: document._id,
-                                date: Date.now()
+                                date: Date.now(),
+                                status: 'unread'
                             }
 
 
@@ -285,14 +288,16 @@ class Casefiles extends BaseHandler {
                                 userId: _id,
                                 activity: 'closed a casefile',
                                 resourceId: document._id,
-                                date: Date.now()
+                                date: Date.now(),
+                                status: 'unread'
                             }
 
                             const _authorNotificationMessage = {
                                 userId: _id,
                                 activity: 'closed a casefile you created',
                                 resourceId: document._id,
-                                date: Date.now()
+                                date: Date.now(),
+                                status: 'unread'
                             }
 
 
@@ -359,14 +364,16 @@ class Casefiles extends BaseHandler {
                         userId: _id,
                         activity: 'deleted a casefile',
                         resourceId: casefile._id,
-                        date: Date.now()
+                        date: Date.now(),
+                        status: 'unread'
                     }
 
                     const _authorNotificationMessage = {
                         userId: _id,
                         activity: 'deleted a casefile you created',
                         resourceId: casefile._id,
-                        date: Date.now()
+                        date: Date.now(),
+                        status: 'unread'
                     }
 
 

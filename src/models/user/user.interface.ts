@@ -14,7 +14,8 @@ interface IUser {
         userId: Types.ObjectId,
         activity: string,
         resourceId: Types.ObjectId,
-        date?: number
+        date: number,
+        status: string
     }[];
     createdAt: Date;
     updatedAt: Date;

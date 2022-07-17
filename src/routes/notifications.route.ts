@@ -9,4 +9,12 @@ router
     .route('/')
     .post(validateToken, authorizeUser, Notification.popNotifications)
 
+router
+    .route('/:id/read')
+    .put(validateToken, authorizeUser, Notification.markAsRead)
+
+router
+    .route('/:id/unread')
+    .put(validateToken, authorizeUser, Notification.markAsUnread)
+
 export default router

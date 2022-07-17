@@ -57,7 +57,8 @@ class Transactions extends BaseHandler {
                     userId: _id,
                     activity: 'created a transaction',
                     resourceId: newTransaction._id,
-                    date: Date.now()
+                    date: Date.now(),
+                    status: 'unread'
                 }
 
 
@@ -202,14 +203,16 @@ class Transactions extends BaseHandler {
                                 userId: _id,
                                 activity: 'made changes to a transaction',
                                 resourceId: document._id,
-                                date: Date.now()
+                                date: Date.now(),
+                                status: 'unread'
                             }
-        
+
                             const _authorNotificationMessage = {
                                 userId: _id,
                                 activity: 'made changes to a transaction you created',
                                 resourceId: document._id,
-                                date: Date.now()
+                                date: Date.now(),
+                                status: 'unread'
                             }
 
 
@@ -259,7 +262,6 @@ class Transactions extends BaseHandler {
     }
 
 
-
     // Close a transaction
     static closeATtransaction(req: Request, res: Response) {
 
@@ -284,14 +286,16 @@ class Transactions extends BaseHandler {
                                 userId: _id,
                                 activity: 'closed a transaction',
                                 resourceId: document._id,
-                                date: Date.now()
+                                date: Date.now(),
+                                status: 'unread'
                             }
-        
+
                             const _authorNotificationMessage = {
                                 userId: _id,
                                 activity: 'closed a transaction you created',
                                 resourceId: document._id,
-                                date: Date.now()
+                                date: Date.now(),
+                                status: 'unread'
                             }
 
 
@@ -358,14 +362,16 @@ class Transactions extends BaseHandler {
                         userId: _id,
                         activity: 'deleted a transaction',
                         resourceId: transaction._id,
-                        date: Date.now()
+                        date: Date.now(),
+                        status: 'unread'
                     }
 
                     const _authorNotificationMessage = {
                         userId: _id,
                         activity: 'deleted a transaction you created',
                         resourceId: transaction._id,
-                        date: Date.now()
+                        date: Date.now(),
+                        status: 'unread'
                     }
 
 
