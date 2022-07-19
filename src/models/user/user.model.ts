@@ -37,8 +37,10 @@ const userSchema = new Schema<IUser>({
     },
     notification: [{
         userId: Schema.Types.ObjectId,
+        user: String,
         activity: String,
         resourceId: Schema.Types.ObjectId,
+        resource: String,
         date: Number,
         status: {type: String, enum: ['read', 'unread'], default: 'unread'}
     }],

@@ -51,12 +51,14 @@ class Transactions extends BaseHandler {
 
             await newTransaction.save().then(async (newTransaction) => {
 
-                const { _id, first_name } = res.locals.user
+                const { _id, first_name, last_name } = res.locals.user
 
                 const notificationMessage = {
                     userId: _id,
+                    user: first_name+' '+last_name,
                     activity: 'created a transaction',
                     resourceId: newTransaction._id,
+                    resource: newTransaction.transaction_id,
                     date: Date.now(),
                     status: 'unread'
                 }
@@ -142,7 +144,6 @@ class Transactions extends BaseHandler {
     }
 
 
-
     static async getNumberOfViews(req: Request, res: Response) {
 
         try {
@@ -166,7 +167,6 @@ class Transactions extends BaseHandler {
         }
 
     }
-
 
 
     // Update a transaction
@@ -197,20 +197,24 @@ class Transactions extends BaseHandler {
                         document.save().then(async (transaction: ITransactionDocument) => {
 
 
-                            const { _id, first_name } = res.locals.user
+                            const { _id, first_name, last_name } = res.locals.user
 
                             const notificationMessage = {
                                 userId: _id,
+                                user: first_name+' '+last_name,
                                 activity: 'made changes to a transaction',
                                 resourceId: document._id,
+                                resource: document.transaction_id,
                                 date: Date.now(),
                                 status: 'unread'
                             }
 
                             const _authorNotificationMessage = {
                                 userId: _id,
+                                user: first_name+' '+last_name,
                                 activity: 'made changes to a transaction you created',
                                 resourceId: document._id,
+                                resource: document.transaction_id,
                                 date: Date.now(),
                                 status: 'unread'
                             }
@@ -280,20 +284,24 @@ class Transactions extends BaseHandler {
 
                         document.save().then(async (_transaction: ITransactionDocument) => {
 
-                            const { _id, first_name } = res.locals.user
+                            const { _id, first_name, last_name } = res.locals.user
 
                             const notificationMessage = {
                                 userId: _id,
+                                user: first_name+' '+last_name,
                                 activity: 'closed a transaction',
                                 resourceId: document._id,
+                                resource: document.transaction_id,
                                 date: Date.now(),
                                 status: 'unread'
                             }
 
                             const _authorNotificationMessage = {
                                 userId: _id,
+                                user: first_name+' '+last_name,
                                 activity: 'closed a transaction you created',
                                 resourceId: document._id,
+                                resource: document.transaction_id,
                                 date: Date.now(),
                                 status: 'unread'
                             }
@@ -355,21 +363,25 @@ class Transactions extends BaseHandler {
                     })
                 } else {
 
-                    const { _id, first_name } = res.locals.user
+                    const { _id, first_name, last_name } = res.locals.user
 
 
                     const notificationMessage = {
                         userId: _id,
+                        user: first_name+' '+last_name,
                         activity: 'deleted a transaction',
                         resourceId: transaction._id,
+                        resource: transaction.transaction_id,
                         date: Date.now(),
                         status: 'unread'
                     }
 
                     const _authorNotificationMessage = {
                         userId: _id,
+                        user: first_name+' '+last_name,
                         activity: 'deleted a transaction you created',
                         resourceId: transaction._id,
+                        resource: transaction.transaction_id,
                         date: Date.now(),
                         status: 'unread'
                     }

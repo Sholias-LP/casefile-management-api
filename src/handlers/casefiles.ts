@@ -55,12 +55,14 @@ class Casefiles extends BaseHandler {
 
             await newCasefile.save().then(async (newCasefile) => {
 
-                const { _id, first_name } = res.locals.user
+                const { _id, first_name, last_name} = res.locals.user
 
                 const notificationMessage = {
                     userId: _id,
+                    user: first_name+' '+last_name,
                     activity: 'created a casefile',
                     resourceId: newCasefile._id,
+                    resource: newCasefile.casefile_id,
                     date: Date.now(),
                     status: 'unread'
                 }
@@ -85,8 +87,7 @@ class Casefiles extends BaseHandler {
         }
 
     }
-
-
+    
 
     // Get all casefiles
     static async getAllCasefiles(req: Request, res: Response) {
@@ -146,7 +147,6 @@ class Casefiles extends BaseHandler {
     }
 
 
-
     // Get number of views on a casefile
     static async getNumberOfViews(req: Request, res: Response) {
 
@@ -171,7 +171,6 @@ class Casefiles extends BaseHandler {
         }
 
     }
-
 
 
     // Update a casefile
@@ -201,21 +200,25 @@ class Casefiles extends BaseHandler {
 
                         document.save().then(async (casefile: ICasefileDocument) => {
 
-                            const { _id, first_name } = res.locals.user
+                            const { _id, first_name, last_name } = res.locals.user
 
 
                             const notificationMessage = {
                                 userId: _id,
+                                user: first_name+' '+last_name,
                                 activity: 'made changes to a casefile',
                                 resourceId: document._id,
+                                resource: document.casefile_id,
                                 date: Date.now(),
                                 status: 'unread'
                             }
 
                             const _authorNotificationMessage = {
                                 userId: _id,
+                                user: first_name+' '+last_name,
                                 activity: 'made changes to a casefile you created',
                                 resourceId: document._id,
+                                resource: document.casefile_id,
                                 date: Date.now(),
                                 status: 'unread'
                             }
@@ -263,7 +266,6 @@ class Casefiles extends BaseHandler {
     }
 
 
-
     // Close a casefile
     static closeACasefile(req: Request, res: Response) {
 
@@ -282,20 +284,24 @@ class Casefiles extends BaseHandler {
 
                         document.save().then(async (_casefile: ICasefileDocument) => {
 
-                            const { _id, first_name } = res.locals.user
+                            const { _id, first_name, last_name } = res.locals.user
 
                             const notificationMessage = {
                                 userId: _id,
+                                user: first_name+' '+last_name,
                                 activity: 'closed a casefile',
                                 resourceId: document._id,
+                                resource: document.casefile_id,
                                 date: Date.now(),
                                 status: 'unread'
                             }
 
                             const _authorNotificationMessage = {
                                 userId: _id,
+                                user: first_name+' '+last_name,
                                 activity: 'closed a casefile you created',
                                 resourceId: document._id,
+                                resource: document.casefile_id,
                                 date: Date.now(),
                                 status: 'unread'
                             }
@@ -358,20 +364,24 @@ class Casefiles extends BaseHandler {
                     })
                 } else {
 
-                    const { _id, first_name } = res.locals.user
+                    const { _id, first_name, last_name } = res.locals.user
 
                     const notificationMessage = {
                         userId: _id,
+                        user: first_name+' '+last_name,
                         activity: 'deleted a casefile',
                         resourceId: casefile._id,
+                        resource: casefile.casefile_id,
                         date: Date.now(),
                         status: 'unread'
                     }
 
                     const _authorNotificationMessage = {
                         userId: _id,
+                        user: first_name+' '+last_name,
                         activity: 'deleted a casefile you created',
                         resourceId: casefile._id,
+                        resource: casefile.casefile_id,
                         date: Date.now(),
                         status: 'unread'
                     }
