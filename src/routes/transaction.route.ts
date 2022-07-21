@@ -28,4 +28,18 @@ router
     .route('/:id/views')
     .get(validateToken, authorizeUser, Transaction.getNumberOfViews)
 
+router
+    .route('/:id/totaldeposit')
+    .get(validateToken, authorizeUser, Transaction.getTotalDeposit)
+
+router
+    .route('/:id/balance')
+    .get(validateToken, authorizeUser, Transaction.getBalance)
+
+router
+    .route('/:id/totalexpenses')
+    .get(validateToken, authorizeUser, Transaction.getTotalExpenses)
+
+
+
 export default router
