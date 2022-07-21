@@ -28,4 +28,17 @@ router
     .route('/:id/views')
     .get(validateToken, authorizeUser, Casefile.getNumberOfViews)
 
+router
+    .route('/:id/totaldeposit')
+    .get(validateToken, authorizeUser, Casefile.getTotalDeposit)
+
+router
+    .route('/:id/balance')
+    .get(validateToken, authorizeUser, Casefile.getBalance)
+
+router
+    .route('/:id/totalexpenses')
+    .get(validateToken, authorizeUser, Casefile.getTotalExpenses)
+
+
 export default router

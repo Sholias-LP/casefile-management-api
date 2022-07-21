@@ -55,11 +55,11 @@ class Casefiles extends BaseHandler {
 
             await newCasefile.save().then(async (newCasefile) => {
 
-                const { _id, first_name, last_name} = res.locals.user
+                const { _id, first_name, last_name } = res.locals.user
 
                 const notificationMessage = {
                     userId: _id,
-                    user: first_name+' '+last_name,
+                    user: first_name + ' ' + last_name,
                     activity: 'created a casefile',
                     resourceId: newCasefile._id,
                     resource: newCasefile.casefile_id,
@@ -87,7 +87,7 @@ class Casefiles extends BaseHandler {
         }
 
     }
-    
+
 
     // Get all casefiles
     static async getAllCasefiles(req: Request, res: Response) {
@@ -173,6 +173,103 @@ class Casefiles extends BaseHandler {
     }
 
 
+    // Get total amount deposited by client
+    static async getTotalDeposit(req: Request, res: Response) {
+
+        try {
+            const { id } = req.params
+
+            if (Types.ObjectId.isValid(id)) {
+
+                CasefileModel.findById(id, (err: Error, document: ICasefileDocument) => {
+                    if (err) res.send(err)
+
+                    const totalDeposit = document.deposit
+                        .map((item: any) => item.amount)
+                        .reduce((a, b) => a + b, 0)
+
+                    return res.status(200).send({
+                        success: true,
+                        data: totalDeposit
+                    })
+                })
+
+            } else {
+                return res.status(404).send({ success: false, message: 'Invalid Id' })
+            }
+        } catch (error) {
+            throw new Error((error as Error).message);
+        }
+
+    }
+        
+
+    // Get client's balance
+    static async getBalance(req: Request, res: Response) {
+
+        try {
+            const { id } = req.params
+
+            if (Types.ObjectId.isValid(id)) {
+
+                CasefileModel.findById(id, (err: Error, document: ICasefileDocument) => {
+                    if (err) res.send(err)
+
+                    const serviceCharge = document.service_fee
+
+                    const totalDeposit = document.deposit
+                        .map((item: any) => item.amount)
+                        .reduce((a, b) => a + b, 0)
+
+                    const balance = serviceCharge - totalDeposit
+
+                    return res.status(200).send({
+                        success: true,
+                        data: balance
+                    })
+                })
+
+            } else {
+                return res.status(404).send({ success: false, message: 'Invalid Id' })
+            }
+        } catch (error) {
+            throw new Error((error as Error).message);
+        }
+
+    }
+
+
+    // Get total expenses incurred
+    static async getTotalExpenses(req: Request, res: Response) {
+
+        try {
+            const { id } = req.params
+
+            if (Types.ObjectId.isValid(id)) {
+
+                CasefileModel.findById(id, (err: Error, document: ICasefileDocument) => {
+                    if (err) res.send(err)
+
+                    const totalExpenses = document.expenses
+                        .map((item: any) => item.amount)
+                        .reduce((a, b) => a + b, 0)
+
+                    return res.status(200).send({
+                        success: true,
+                        data: totalExpenses
+                    })
+                })
+
+            } else {
+                return res.status(404).send({ success: false, message: 'Invalid Id' })
+            }
+        } catch (error) {
+            throw new Error((error as Error).message);
+        }
+
+    }
+
+
     // Update a casefile
     static async updateACasefile(req: Request, res: Response) {
 
@@ -205,7 +302,7 @@ class Casefiles extends BaseHandler {
 
                             const notificationMessage = {
                                 userId: _id,
-                                user: first_name+' '+last_name,
+                                user: first_name + ' ' + last_name,
                                 activity: 'made changes to a casefile',
                                 resourceId: document._id,
                                 resource: document.casefile_id,
@@ -215,7 +312,7 @@ class Casefiles extends BaseHandler {
 
                             const _authorNotificationMessage = {
                                 userId: _id,
-                                user: first_name+' '+last_name,
+                                user: first_name + ' ' + last_name,
                                 activity: 'made changes to a casefile you created',
                                 resourceId: document._id,
                                 resource: document.casefile_id,
@@ -288,7 +385,7 @@ class Casefiles extends BaseHandler {
 
                             const notificationMessage = {
                                 userId: _id,
-                                user: first_name+' '+last_name,
+                                user: first_name + ' ' + last_name,
                                 activity: 'closed a casefile',
                                 resourceId: document._id,
                                 resource: document.casefile_id,
@@ -298,7 +395,7 @@ class Casefiles extends BaseHandler {
 
                             const _authorNotificationMessage = {
                                 userId: _id,
-                                user: first_name+' '+last_name,
+                                user: first_name + ' ' + last_name,
                                 activity: 'closed a casefile you created',
                                 resourceId: document._id,
                                 resource: document.casefile_id,
@@ -368,7 +465,7 @@ class Casefiles extends BaseHandler {
 
                     const notificationMessage = {
                         userId: _id,
-                        user: first_name+' '+last_name,
+                        user: first_name + ' ' + last_name,
                         activity: 'deleted a casefile',
                         resourceId: casefile._id,
                         resource: casefile.casefile_id,
@@ -378,7 +475,7 @@ class Casefiles extends BaseHandler {
 
                     const _authorNotificationMessage = {
                         userId: _id,
-                        user: first_name+' '+last_name,
+                        user: first_name + ' ' + last_name,
                         activity: 'deleted a casefile you created',
                         resourceId: casefile._id,
                         resource: casefile.casefile_id,
