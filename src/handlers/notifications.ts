@@ -1,3 +1,4 @@
+import { match } from 'assert'
 import { Request, Response } from 'express'
 import { QueryOptions, Types } from 'mongoose'
 import { BaseHandler } from '../interfaces/handler'
@@ -45,93 +46,6 @@ class Notification extends BaseHandler {
     }
 
 
-    static markAsRead(req: Request, res: Response) {
-
-        const notificationId = new Types.ObjectId(req.params.id)
-
-        try {
-
-            if (Types.ObjectId.isValid(notificationId)) {
-
-                UserModel.findById({ _id: res.locals.user._id }, (error: Error, document: IUser) => {
-
-                    if (error) return res.send({ success: false, message: 'Failed to mark as read: ' + error })
-
-                    const getNotification = document.notification.find((element: any) => String(element._id) == String(notificationId))
-
-
-                    if (!getNotification) {
-                        return res.status(404).send({
-                            success: false,
-                            message: 'Notification not found'
-                        })
-                    } else {
-                        if (getNotification.status === 'read') return res.status(200).send({ success: false, message: 'Already marked as read' })
-
-                        getNotification.status = 'read'
-                        document.save().then(async (_el: any) => {
-                            return res.status(200).send({
-                                success: true,
-                                message: 'Marked as read'
-                            })
-                        }).catch((error: Error) => {
-                            throw new Error(error.message);
-                        })
-                    }
-                })
-            } else {
-                return res.status(404).send({ success: false, message: 'Invalid ID' })
-            }
-        } catch (error) {
-            throw new Error((error as Error).message);
-        }
-
-    }
-
-    static markAsUnread(req: Request, res: Response) {
-
-
-        const notificationId = new Types.ObjectId(req.params.id)
-
-        try {
-
-            if (Types.ObjectId.isValid(notificationId)) {
-
-                UserModel.findById({ _id: res.locals.user._id }, (error: Error, document: IUser) => {
-
-                    if (error) return res.send({ success: false, message: 'Failed to mark as unread: ' + error })
-
-                    const getNotification = document.notification.find((element: any) => String(element._id) == String(notificationId))
-
-
-                    if (!getNotification) {
-                        return res.status(404).send({
-                            success: false,
-                            message: 'Notification not found'
-                        })
-                    } else {
-                        if (getNotification.status === 'unread') return res.status(201).send({ success: false, message: 'Already marked as unread' })
-
-                        getNotification.status = 'unread'
-                        document.save().then(async (_el: any) => {
-                            return res.status(200).send({
-                                success: true,
-                                message: 'Marked as unread'
-                            })
-                        }).catch((error: Error) => {
-                            throw new Error(error.message);
-                        })
-                    }
-                })
-            } else {
-                return res.status(404).send({ success: false, message: 'Invalid ID' })
-            }
-        } catch (error) {
-            throw new Error((error as Error).message);
-        }
-
-    }
-
     static bulkMarkAsRead(req: Request, res: Response) {
 
         const bulkIds = req.body.notificationIds
@@ -167,11 +81,38 @@ class Notification extends BaseHandler {
                 match ? match.status = 'unread' : null
             })
 
-            document.save().then(async (_el: any) => {
+            document.save().then((_el: any) => {
                 return res.status(200).send({
                     success: true,
                     message: 'Marked as unread'
                 })
+            }).catch((error: Error) => {
+                throw new Error(error.message);
+            })
+
+        })
+
+    }
+
+
+    static bulkDelete(req: Request, res: Response) {
+
+        const bulkIds = req.body.notificationIds
+
+        UserModel.findById({ _id: res.locals.user._id }, (error: Error, document: IUser) => {
+
+            bulkIds.map((item: any) => {
+                const match = document.notification.find((element: any) => String(item) == String(element._id))
+                const array: any = document.notification
+
+                const index = array.indexOf(match);
+                if (index > -1) {
+                    array.splice(index, 1);
+                }
+            })
+
+            document.save().then((_el: any) => {
+                return res.sendStatus(204)
             }).catch((error: Error) => {
                 throw new Error(error.message);
             })

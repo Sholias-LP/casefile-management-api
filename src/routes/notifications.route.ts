@@ -9,14 +9,6 @@ router
     .route('/')
     .post(validateToken, authorizeUser, Notification.popNotifications)
 
-router
-    .route('/:id/read')
-    .put(validateToken, authorizeUser, Notification.markAsRead)
-
-router
-    .route('/:id/unread')
-    .put(validateToken, authorizeUser, Notification.markAsUnread)
-
 
 router
     .route('/read')
@@ -25,5 +17,10 @@ router
 router
     .route('/unread')
     .patch(validateToken, authorizeUser, Notification.bulkMarkAsUnread)
+
+
+router
+    .route('/delete')
+    .delete(validateToken, authorizeUser, Notification.bulkDelete)
 
 export default router
