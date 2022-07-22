@@ -80,7 +80,7 @@ class Notification extends BaseHandler {
                     }
                 })
             } else {
-                return res.status(404).send({success: false, message: 'Invalid ID' })
+                return res.status(404).send({ success: false, message: 'Invalid ID' })
             }
         } catch (error) {
             throw new Error((error as Error).message);
@@ -124,11 +124,59 @@ class Notification extends BaseHandler {
                     }
                 })
             } else {
-                return res.status(404).send({success: false, message: 'Invalid ID' })
+                return res.status(404).send({ success: false, message: 'Invalid ID' })
             }
         } catch (error) {
             throw new Error((error as Error).message);
         }
+
+    }
+
+    static bulkMarkAsRead(req: Request, res: Response) {
+
+        const bulkIds = req.body.notificationIds
+
+        UserModel.findById({ _id: res.locals.user._id }, (error: Error, document: IUser) => {
+
+            bulkIds.map((item: any) => {
+                const match = document.notification.find((element: any) => String(item) == String(element._id))
+                match ? match.status = 'read' : null
+            })
+
+            document.save().then(async (_el: any) => {
+                return res.status(200).send({
+                    success: true,
+                    message: 'Marked as read'
+                })
+            }).catch((error: Error) => {
+                throw new Error(error.message);
+            })
+
+        })
+
+    }
+
+    static bulkMarkAsUnread(req: Request, res: Response) {
+
+        const bulkIds = req.body.notificationIds
+
+        UserModel.findById({ _id: res.locals.user._id }, (error: Error, document: IUser) => {
+
+            bulkIds.map((item: any) => {
+                const match = document.notification.find((element: any) => String(item) == String(element._id))
+                match ? match.status = 'unread' : null
+            })
+
+            document.save().then(async (_el: any) => {
+                return res.status(200).send({
+                    success: true,
+                    message: 'Marked as unread'
+                })
+            }).catch((error: Error) => {
+                throw new Error(error.message);
+            })
+
+        })
 
     }
 
