@@ -17,4 +17,13 @@ router
     .route('/:id/unread')
     .put(validateToken, authorizeUser, Notification.markAsUnread)
 
+
+router
+    .route('/read')
+    .patch(validateToken, authorizeUser, Notification.bulkMarkAsRead)
+
+router
+    .route('/unread')
+    .patch(validateToken, authorizeUser, Notification.bulkMarkAsUnread)
+
 export default router
