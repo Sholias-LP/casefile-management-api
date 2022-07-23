@@ -7,7 +7,7 @@ const router = express.Router()
 
 router
     .route('/')
-    .post(validateToken, authorizeUser, Notification.popNotifications)
+    .get(validateToken, authorizeUser, Notification.popNotifications)
 
 
 router
